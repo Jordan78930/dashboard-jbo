@@ -185,7 +185,8 @@ section{padding:34px 0 0;}
 }
 .chart-card h4{font-size:14.5px; font-weight:700; margin-bottom:4px;}
 .chart-card .sub{font-size:12px; color:var(--txt-2); margin-bottom:16px;}
-.chart-card canvas{max-height:280px;}
+.chart-canvas-wrap{position:relative; height:260px; width:100%;}
+.chart-canvas-wrap.donut{height:220px;}
 
 /* ===== FUNNEL ===== */
 .funnel{display:flex; flex-direction:column; gap:10px;}
@@ -409,6 +410,16 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
 .form-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;}
 .form-head h4{font-size:15px; font-weight:700;}
 .form-head .sub{font-size:12px; color:var(--txt-2);}
+.form-head-toggle{
+  width:100%; background:none; border:none; padding:0; margin-bottom:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left;
+}
+.form-head-toggle .chev{width:18px; height:18px; color:var(--txt-2); flex-shrink:0; transition:transform .25s ease;}
+#offre-form-card.collapsed .form-head-toggle{margin-bottom:0;}
+#offre-form-card.collapsed .chev{transform:rotate(-90deg);}
+.form-collapsible{display:grid; grid-template-rows:1fr; transition:grid-template-rows .28s cubic-bezier(.4,0,.2,1), opacity .2s ease; opacity:1;}
+.form-collapsible > *{overflow:hidden; min-height:0;}
+#offre-form-card.collapsed .form-collapsible{grid-template-rows:0fr; opacity:0;}
 .preset-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px;}
 .preset-btn{
   text-align:left; padding:13px 16px; border-radius:13px;
@@ -634,6 +645,11 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
   .chart-card{padding:14px;}
   .chart-card h4{font-size:13px;}
   .chart-card .sub{font-size:11px; margin-bottom:10px;}
+  .chart-canvas-wrap{height:190px;}
+  .chart-canvas-wrap.donut{height:170px;}
+  /* accueil: one clear chart beats two cramped ones - commissions has its own page */
+  #chart-commissions-card{display:none;}
+  #page-accueil .grid-2{grid-template-columns:1fr;}
 
   .table-toolbar{padding:10px 12px; gap:8px;}
   .filter-pills{gap:5px; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; padding-bottom:2px;}
@@ -645,27 +661,43 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
   .modal-overlay{padding:0; align-items:flex-end;}
   .modal-box{max-width:100%; width:100%; border-radius:18px 18px 0 0; max-height:90vh;}
 
-  /* tables -> stacked cards (no horizontal scroll, no tiny text) */
+  /* tables -> real compact cards (scannable: client+amount up top, status badge in the corner, meta condensed) */
   .table-wrap{max-height:none;}
-  table, thead, tbody, th, tr, td{display:block; width:100%;}
+  table, thead, tbody, th, td{display:block; width:100%;}
   thead{display:none;}
   tbody tr{
-    border:1px solid var(--glass-brd); border-radius:13px; padding:12px 14px; margin:10px;
+    display:flex; flex-direction:column; position:relative;
+    border:1px solid var(--glass-brd); border-radius:13px; padding:11px 13px; margin:0 0 9px;
     background:rgba(255,255,255,.02);
   }
-  tbody tr:hover{background:rgba(255,255,255,.02);}
   tbody td{
-    padding:6px 0; border:none; white-space:normal; display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+    padding:0; border:none; white-space:normal; display:block;
   }
   tbody td::before{
-    content:attr(data-label); font-size:10px; font-weight:700; color:var(--txt-2); text-transform:uppercase; letter-spacing:.3px;
-    flex-shrink:0;
+    content:attr(data-label); font-size:9.5px; font-weight:700; color:var(--txt-2); text-transform:uppercase; letter-spacing:.3px;
+    display:block; margin-bottom:1px;
   }
-  tbody td.main{font-size:14.5px; padding-top:0;}
-  tbody td.main::before{display:none;}
-  tbody td.note-cell{display:block;}
-  tbody td.note-cell::before{display:block; margin-bottom:3px;}
-  tbody td:has(.row-actions){display:block; padding-top:10px; margin-top:6px; border-top:1px solid rgba(255,255,255,.06);}
+  /* status chip pinned to the top-right corner, no label clutter */
+  tbody td[data-label="Statut"]{position:absolute; top:11px; right:13px; width:auto;}
+  tbody td[data-label="Statut"]::before{display:none;}
+  /* client name + amount: prominent headline, padded right so they don't run under the status badge */
+  tbody td[data-label="Client"]{order:-5; font-size:15.5px; font-weight:700; color:var(--txt-0); padding-right:72px;}
+  tbody td[data-label="Client"]::before{display:none;}
+  tbody td.num{order:-4; font-size:16px; font-weight:800; color:#34d399; margin-top:1px; padding-right:72px;}
+  tbody td.num::before{display:none;}
+  /* condensed meta line: offer number + date, muted, inline */
+  tbody td.main, tbody td[data-label="Référence"], tbody td[data-label="Date"]{
+    order:-3; display:inline; font-size:11px; color:var(--txt-2); margin-top:5px;
+  }
+  tbody td.main::before, tbody td[data-label="Référence"]::before, tbody td[data-label="Date"]::before{ display:none; }
+  tbody td.main::after{ content:' · '; }
+  tbody td[data-label="Produit"]{order:-2; font-size:12px; color:var(--txt-1); margin-top:2px; display:block;}
+  tbody td[data-label="Produit"]::before{display:none;}
+  tbody td[data-label="Période"]{order:-3; font-size:11px; color:var(--txt-2); margin-top:5px;}
+  tbody td[data-label="Période"]::before{display:none;}
+  tbody td.note-cell{order:-1; margin-top:6px; font-size:11.5px; padding-top:6px; border-top:1px solid rgba(255,255,255,.05);}
+  tbody td.note-cell::before{margin-bottom:2px;}
+  tbody td:has(.row-actions){order:0; padding-top:9px; margin-top:8px; border-top:1px solid rgba(255,255,255,.06);}
   tbody td:has(.row-actions)::before{display:none;}
   .row-actions{width:100%;}
   .row-actions .row-btn{flex:1; justify-content:center;}
@@ -855,13 +887,13 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
       <div class="grid-2">
         <div class="chart-card">
           <h4>Évolution du CA</h4>
-          <div class="sub">Chiffre d'affaires facturé par mois (caData)</div>
-          <canvas id="chartCaTrend"></canvas>
+          <div class="sub">Chiffre d'affaires facturé par mois</div>
+          <div class="chart-canvas-wrap"><canvas id="chartCaTrend"></canvas></div>
         </div>
-        <div class="chart-card">
+        <div class="chart-card" id="chart-commissions-card">
           <h4>Commissions mensuelles</h4>
           <div class="sub">CA entreprise vs. revenu personnel</div>
-          <canvas id="chartCommissions"></canvas>
+          <div class="chart-canvas-wrap"><canvas id="chartCommissions"></canvas></div>
         </div>
       </div>
     </section>
@@ -871,11 +903,15 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
   <!-- ================= PAGE PIPELINE ================= -->
   <div class="page" id="page-pipeline">
     <section style="padding-top:0;">
-      <div class="form-card">
-        <div class="form-head">
-          <h4>Ajouter une offre</h4>
-          <span class="sub">Saisie rapide et plus intuitive</span>
-        </div>
+      <div class="form-card" id="offre-form-card">
+        <button type="button" class="form-head form-head-toggle" id="offre-form-toggle">
+          <span>
+            <h4>Ajouter une offre</h4>
+            <span class="sub">Saisie rapide et plus intuitive</span>
+          </span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="form-collapsible" id="offre-form-body">
         <div class="preset-row" id="offre-presets">
           <button type="button" class="preset-btn" data-preset="urgent">
             <div class="t">Urgent</div>
@@ -915,12 +951,13 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
             </button>
           </div>
         </form>
+        </div>
       </div>
     </section>
     <section style="padding-top:0;">
       <div class="grid-3">
-        <div class="chart-card"><h4>Statut des offres</h4><div class="sub">Répartition en nombre</div><canvas id="chartStatutDonut"></canvas></div>
-        <div class="chart-card" style="grid-column:span 2;"><h4>Montant par statut</h4><div class="sub">Valeur cumulée des offres (€)</div><canvas id="chartMontantStatut"></canvas></div>
+        <div class="chart-card"><h4>Statut des offres</h4><div class="sub">Répartition en nombre</div><div class="chart-canvas-wrap donut"><canvas id="chartStatutDonut"></canvas></div></div>
+        <div class="chart-card" style="grid-column:span 2;"><h4>Montant par statut</h4><div class="sub">Valeur cumulée des offres (€)</div><div class="chart-canvas-wrap"><canvas id="chartMontantStatut"></canvas></div></div>
       </div>
     </section>
     <section>
@@ -1061,7 +1098,7 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
           </div>
           <select id="comm-perso-year" style="background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); border-radius:10px; padding:7px 12px; color:var(--txt-0); font-size:13px; font-weight:600;"></select>
         </div>
-        <canvas id="chartPersonnel" style="max-height:260px; margin-top:14px;"></canvas>
+        <div class="chart-canvas-wrap" style="margin-top:14px;"><canvas id="chartPersonnel"></canvas></div>
       </div>
     </section>
     <section>
@@ -1920,9 +1957,12 @@ function killIfZeroSized(chart){
 function fixChartsForPage(page){
   if(page==='accueil'){
     chartCaTrend = killIfZeroSized(chartCaTrend);
-    chartCommissions = killIfZeroSized(chartCommissions);
     if(!chartCaTrend) renderChartCaTrend();
-    if(!chartCommissions) renderChartCommissions();
+    const commCardVisible = document.getElementById('chart-commissions-card').offsetParent !== null;
+    if(commCardVisible){
+      chartCommissions = killIfZeroSized(chartCommissions);
+      if(!chartCommissions) renderChartCommissions();
+    }
   }
   if(page==='pipeline'){
     chartStatutDonut = killIfZeroSized(chartStatutDonut);
@@ -1960,6 +2000,7 @@ Chart.defaults.color = '#aeb2c9';
 Chart.defaults.font.family = "'Inter',sans-serif";
 Chart.defaults.font.size = 11.5;
 Chart.defaults.borderColor = 'rgba(255,255,255,.06)';
+Chart.defaults.maintainAspectRatio = false;
 
 let chartCaTrend, chartCommissions, chartStatutDonut, chartMontantStatut, chartPersonnel;
 
@@ -2211,6 +2252,13 @@ document.getElementById('offres-filters').addEventListener('click', e=>{
   renderOffresTable();
 });
 
+/* ----- repli du formulaire (replié par défaut sur mobile) ----- */
+const offreFormCard = document.getElementById('offre-form-card');
+if(window.matchMedia('(max-width:640px)').matches) offreFormCard.classList.add('collapsed');
+document.getElementById('offre-form-toggle').addEventListener('click', ()=>{
+  offreFormCard.classList.toggle('collapsed');
+});
+
 /* ----- ajouter une offre ----- */
 let selectedPreset = 'validation';
 const PRESET_STATUT = {urgent:'relance', validation:'relance', relance:'relance'};
@@ -2241,6 +2289,7 @@ document.getElementById('offre-form').addEventListener('submit', e=>{
   refreshAccueil();
   refreshPipeline();
   persist();
+  if(window.matchMedia('(max-width:640px)').matches) offreFormCard.classList.add('collapsed');
   toast('Offre ajoutée avec succès');
 });
 
