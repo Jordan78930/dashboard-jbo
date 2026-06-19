@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bilan-ca-v3';
+const CACHE_NAME = 'bilan-ca-v4';
 const ASSETS = [
   './dashboard_backup_2026_report.html',
   './manifest.webmanifest',

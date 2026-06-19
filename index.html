@@ -163,7 +163,7 @@ section{padding:34px 0 0;}
   padding:26px; box-shadow:var(--shadow-card);
 }
 .obj-ring-wrap{position:relative; width:140px; height:140px; flex-shrink:0;}
-.obj-ring-wrap svg{transform:rotate(-90deg);}
+.obj-ring-wrap svg{transform:rotate(-90deg); width:100%; height:100%; display:block;}
 .obj-ring-bg{fill:none; stroke:rgba(255,255,255,.07); stroke-width:11;}
 .obj-ring-fg{fill:none; stroke:url(#ringGrad); stroke-width:11; stroke-linecap:round; transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);}
 .obj-ring-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
@@ -496,7 +496,10 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
 @keyframes toastOut{to{opacity:0; transform:translateX(30px);}}
 .toast .ic{width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
 .toast.success .ic{background:rgba(16,185,129,.18); color:#34d399;}
+.toast.error{border-color:rgba(244,63,94,.4); background:#251018;}
+.toast.error .ic{background:rgba(244,63,94,.2); color:#fb7185;}
 .toast .ic svg{width:12px; height:12px;}
+@media (max-width:640px){ .toast-wrap{left:14px; right:14px; bottom:calc(78px + env(safe-area-inset-bottom));} .toast{min-width:0; max-width:none;} }
 
 /* ===== COMMISSIONS PAGE ===== */
 .comm-head{
@@ -759,7 +762,7 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
 <body>
 
 <div class="topbar">
-  <div class="topbar-inner wrap" style="padding-left:0;padding-right:0;">
+  <div class="topbar-inner wrap">
     <div class="brand">
       <div class="brand-mark">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
@@ -1929,10 +1932,19 @@ function toast(msg, type='success'){
   const wrap = document.getElementById('toast-wrap');
   const el = document.createElement('div');
   el.className = `toast ${type}`;
-  el.innerHTML = `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>${msg}</span>`;
+  const iconPath = type==='error' ? '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>' : '<polyline points="20 6 9 17 4 12"/>';
+  el.innerHTML = `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${iconPath}</svg></span><span style="word-break:break-word;">${msg}</span>`;
   wrap.appendChild(el);
-  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(), 260); }, 2600);
+  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(), 260); }, type==='error' ? 8000 : 2600);
 }
+
+/* surfaces any uncaught JS error directly in the UI so device-specific bugs are visible without a debugger */
+window.addEventListener('error', e=>{
+  toast('Erreur JS: ' + (e.message||'inconnue') + ' (ligne ' + e.lineno + ')', 'error');
+});
+window.addEventListener('unhandledrejection', e=>{
+  toast('Erreur async: ' + (e.reason && e.reason.message || e.reason || 'inconnue'), 'error');
+});
 
 const MOIS_FR = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
 const MOIS_LONG_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
