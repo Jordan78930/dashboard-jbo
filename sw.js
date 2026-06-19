@@ -1,8 +1,13 @@
-const CACHE_NAME = 'bilan-ca-v1';
+const CACHE_NAME = 'bilan-ca-v2';
 const ASSETS = [
   './index.html',
   './manifest.webmanifest',
   './icon.svg',
+  './icon-16.png',
+  './icon-32.png',
+  './icon-180.png',
+  './icon-192.png',
+  './icon-512.png',
 ];
 
 self.addEventListener('install', e => {
