@@ -1,6 +1,6 @@
-const CACHE_NAME = 'bilan-ca-v2';
+const CACHE_NAME = 'bilan-ca-v3';
 const ASSETS = [
-  './index.html',
+  './dashboard_backup_2026_report.html',
   './manifest.webmanifest',
   './icon.svg',
   './icon-16.png',
@@ -24,8 +24,10 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const isNavigation = e.request.mode === 'navigate' || e.request.url.endsWith('.html');
+  const req = isNavigation ? new Request(e.request.url, { cache: 'no-cache' }) : e.request;
   e.respondWith(
-    fetch(e.request)
+    fetch(req)
       .then(res => {
         const copy = res.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
