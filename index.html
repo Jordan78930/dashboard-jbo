@@ -637,6 +637,9 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
 
   .table-toolbar{padding:10px 12px; gap:8px;}
   .filter-pills{gap:5px; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; padding-bottom:2px;}
+  /* standalone filter rows (not inside a scroll-safe toolbar) wrap instead of needing a swipe */
+  #rdv-filters{flex-wrap:wrap; overflow-x:visible; gap:6px;}
+  #rdv-filters .pill{flex:0 0 auto;}
   .filter-pills .pill{flex-shrink:0;}
   .modal-box{padding:16px; max-height:94vh; border-radius:16px;}
   .modal-overlay{padding:0; align-items:flex-end;}
@@ -1905,7 +1908,37 @@ function goToPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  fixChartsForPage(page);
 }
+/* Charts created while their page was display:none get stuck at a 0x0 canvas
+   (Chart.js caches that size internally, so a plain .resize() call doesn't fix it).
+   The reliable fix is to destroy and recreate them now that the container is visible. */
+function killIfZeroSized(chart){
+  if(chart && chart.canvas && chart.canvas.width===0){ chart.destroy(); return null; }
+  return chart;
+}
+function fixChartsForPage(page){
+  if(page==='accueil'){
+    chartCaTrend = killIfZeroSized(chartCaTrend);
+    chartCommissions = killIfZeroSized(chartCommissions);
+    if(!chartCaTrend) renderChartCaTrend();
+    if(!chartCommissions) renderChartCommissions();
+  }
+  if(page==='pipeline'){
+    chartStatutDonut = killIfZeroSized(chartStatutDonut);
+    chartMontantStatut = killIfZeroSized(chartMontantStatut);
+    if(!chartStatutDonut || !chartMontantStatut) renderChartsPipeline();
+  }
+  if(page==='ca'){
+    chartPersonnel = killIfZeroSized(chartPersonnel);
+    if(!chartPersonnel) renderChartPersonnel();
+  }
+}
+window.addEventListener('resize', ()=> requestAnimationFrame(()=>{
+  [chartCaTrend, chartCommissions, chartStatutDonut, chartMontantStatut, chartPersonnel].forEach(c=>{
+    if(c && c.canvas && c.canvas.offsetParent !== null) c.resize();
+  });
+}));
 document.querySelectorAll('.tab-btn, .bn-btn').forEach(btn=>{
   btn.addEventListener('click', ()=> goToPage(btn.dataset.page));
 });
@@ -2827,6 +2860,7 @@ document.getElementById('file-import').addEventListener('change', e=>{
 refreshAccueil();
 refreshPipeline();
 renderCommissionsPage();
+fixChartsForPage('accueil');
 
 /* ===================== PWA: SERVICE WORKER ===================== */
 if('serviceWorker' in navigator && (location.protocol==='http:' || location.protocol==='https:')){
