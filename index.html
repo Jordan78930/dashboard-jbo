@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bilan Commercial — Archive Nord-Est</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0a0b14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bilan CA">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg-0:#0a0b14;
+  --bg-1:#0f1120;
+  --bg-2:#14172a;
+  --glass:rgba(255,255,255,.045);
+  --glass-brd:rgba(255,255,255,.08);
+  --glass-brd-hov:rgba(255,255,255,.16);
+  --txt-0:#f4f5fb;
+  --txt-1:#aeb2c9;
+  --txt-2:#6c7195;
+  --indigo:#6366f1;
+  --violet:#a855f7;
+  --pink:#ec4899;
+  --emerald:#10b981;
+  --amber:#f59e0b;
+  --rose:#f43f5e;
+  --sky:#38bdf8;
+  --grad-hero:linear-gradient(135deg,#4f46e5 0%,#7c3aed 45%,#c026d3 100%);
+  --grad-txt:linear-gradient(135deg,#a5b4fc 0%,#e9d5ff 100%);
+  --shadow-card:0 8px 32px rgba(0,0,0,.35);
+  --radius:18px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse 900px 600px at 12% -8%, rgba(124,58,237,.22), transparent 60%),
+    radial-gradient(ellipse 800px 700px at 100% 0%, rgba(56,189,248,.13), transparent 55%),
+    radial-gradient(ellipse 1000px 800px at 50% 110%, rgba(236,72,153,.10), transparent 55%),
+    var(--bg-0);
+  color:var(--txt-0);
+  min-height:100vh;
+  padding:0 0 60px;
+  line-height:1.55;
+}
+::selection{background:rgba(124,58,237,.4);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12); border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.22);}
+
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+
+.wrap{max-width:1360px; margin:0 auto; padding:0 28px;}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter:blur(18px) saturate(160%);
+  background:rgba(10,11,20,.72);
+  border-bottom:1px solid var(--glass-brd);
+}
+.topbar-inner{
+  max-width:1360px; margin:0 auto; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand-mark{
+  width:38px; height:38px; border-radius:11px;
+  background:var(--grad-hero);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 16px rgba(124,58,237,.4);
+  flex-shrink:0;
+}
+.brand-mark svg{width:20px; height:20px;}
+.brand-txt h1{font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:800; letter-spacing:.2px;}
+.brand-txt p{font-size:12px; color:var(--txt-2); font-weight:500;}
+.badge-archive{
+  display:flex; align-items:center; gap:6px;
+  font-size:11.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
+  padding:6px 12px; border-radius:99px;
+  background:rgba(245,158,11,.12); color:#fbbf24;
+  border:1px solid rgba(245,158,11,.28);
+}
+.badge-archive svg{width:13px; height:13px;}
+
+.tabs{display:flex; gap:4px; background:var(--glass); border:1px solid var(--glass-brd); border-radius:13px; padding:4px;}
+.tab-btn{
+  padding:8px 16px; border:none; background:transparent; color:var(--txt-1);
+  font-size:13px; font-weight:600; border-radius:9px; transition:all .2s ease;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:var(--txt-0); background:rgba(255,255,255,.05);}
+.tab-btn.active{background:var(--grad-hero); color:#fff; box-shadow:0 4px 14px rgba(124,58,237,.35);}
+
+/* ===== HERO ===== */
+.hero{padding:46px 0 8px;}
+.hero-eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12.5px; font-weight:700; color:#c4b5fd; letter-spacing:.4px; text-transform:uppercase;
+  background:rgba(124,58,237,.13); border:1px solid rgba(124,58,237,.3);
+  padding:6px 14px; border-radius:99px; margin-bottom:18px;
+}
+.hero h2{
+  font-family:'Plus Jakarta Sans',sans-serif; font-weight:800;
+  font-size:clamp(28px,4vw,42px); line-height:1.12; letter-spacing:-.5px;
+  background:var(--grad-txt); -webkit-background-clip:text; background-clip:text; color:transparent;
+  max-width:780px; margin-bottom:12px;
+}
+.hero p.sub{color:var(--txt-1); font-size:15.5px; max-width:620px;}
+
+/* ===== SECTION ===== */
+section{padding:34px 0 0;}
+.section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap;}
+.section-head h3{font-family:'Plus Jakarta Sans',sans-serif; font-size:19px; font-weight:700;}
+.section-head .hint{font-size:13px; color:var(--txt-2);}
+
+/* ===== KPI GRID ===== */
+.kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+.kpi-card{
+  position:relative; overflow:hidden;
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow-card);
+  transition:transform .25s ease, border-color .25s ease;
+}
+.kpi-card:hover{transform:translateY(-3px); border-color:var(--glass-brd-hov);}
+.kpi-card::before{
+  content:''; position:absolute; inset:0; opacity:.5; pointer-events:none;
+  background:radial-gradient(160px 100px at 100% 0%, var(--kpi-glow,rgba(124,58,237,.18)), transparent 70%);
+}
+.kpi-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.kpi-icon{
+  width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+  background:var(--kpi-bg,rgba(99,102,241,.15)); color:var(--kpi-fg,#a5b4fc);
+}
+.kpi-icon svg{width:19px; height:19px;}
+.kpi-delta{font-size:12px; font-weight:700; padding:3px 9px; border-radius:99px; display:flex; align-items:center; gap:3px;}
+.kpi-delta.up{background:rgba(16,185,129,.14); color:#34d399;}
+.kpi-delta.down{background:rgba(244,63,94,.14); color:#fb7185;}
+.kpi-val{font-family:'Plus Jakarta Sans',sans-serif; font-size:28px; font-weight:800; letter-spacing:-.5px; margin-bottom:4px;}
+.kpi-label{font-size:13px; color:var(--txt-2); font-weight:500;}
+
+/* ===== OBJECTIF RING ===== */
+.obj-card{
+  display:flex; align-items:center; gap:26px; flex-wrap:wrap;
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  padding:26px; box-shadow:var(--shadow-card);
+}
+.obj-ring-wrap{position:relative; width:140px; height:140px; flex-shrink:0;}
+.obj-ring-wrap svg{transform:rotate(-90deg);}
+.obj-ring-bg{fill:none; stroke:rgba(255,255,255,.07); stroke-width:11;}
+.obj-ring-fg{fill:none; stroke:url(#ringGrad); stroke-width:11; stroke-linecap:round; transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);}
+.obj-ring-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.obj-ring-center .pct{font-family:'Plus Jakarta Sans',sans-serif; font-size:24px; font-weight:800;}
+.obj-ring-center .lbl{font-size:11px; color:var(--txt-2); font-weight:600;}
+.obj-info{flex:1; min-width:220px;}
+.obj-info h4{font-size:15px; font-weight:700; margin-bottom:10px;}
+.obj-stats{display:flex; gap:28px; flex-wrap:wrap;}
+.obj-stat .v{font-family:'Plus Jakarta Sans',sans-serif; font-size:19px; font-weight:800;}
+.obj-stat .l{font-size:12px; color:var(--txt-2); margin-top:2px;}
+
+/* ===== CHART CARDS ===== */
+.grid-2{display:grid; grid-template-columns:1.5fr 1fr; gap:18px;}
+.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+.chart-card{
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow-card);
+}
+.chart-card h4{font-size:14.5px; font-weight:700; margin-bottom:4px;}
+.chart-card .sub{font-size:12px; color:var(--txt-2); margin-bottom:16px;}
+.chart-card canvas{max-height:280px;}
+
+/* ===== FUNNEL ===== */
+.funnel{display:flex; flex-direction:column; gap:10px;}
+.funnel-row{display:grid; grid-template-columns:120px 1fr 70px; align-items:center; gap:12px;}
+.funnel-label{font-size:12.5px; font-weight:600; color:var(--txt-1);}
+.funnel-track{height:30px; background:rgba(255,255,255,.04); border-radius:9px; overflow:hidden; position:relative;}
+.funnel-fill{height:100%; border-radius:9px; display:flex; align-items:center; padding-left:10px; font-size:11.5px; font-weight:700; color:#fff; transition:width 1s cubic-bezier(.4,0,.2,1); white-space:nowrap;}
+.funnel-val{font-size:12.5px; font-weight:700; text-align:right;}
+
+/* ===== TABLE ===== */
+.table-card{
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  box-shadow:var(--shadow-card); overflow:hidden;
+}
+.table-toolbar{display:flex; gap:10px; padding:18px 22px; border-bottom:1px solid var(--glass-brd); flex-wrap:wrap; align-items:center;}
+.search-input{
+  flex:1; min-width:180px; background:rgba(255,255,255,.04); border:1px solid var(--glass-brd);
+  border-radius:10px; padding:9px 14px 9px 36px; color:var(--txt-0); font-size:13px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c7195' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:12px center;
+}
+.search-input:focus{outline:none; border-color:rgba(124,58,237,.5); background-color:rgba(124,58,237,.06);}
+.filter-pills{display:flex; gap:6px; flex-wrap:wrap;}
+.pill{
+  padding:7px 13px; border-radius:99px; font-size:12px; font-weight:600;
+  background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); color:var(--txt-1);
+  transition:all .18s ease;
+}
+.pill:hover{border-color:var(--glass-brd-hov); color:var(--txt-0);}
+.pill.active{background:var(--grad-hero); color:#fff; border-color:transparent;}
+
+.table-wrap{overflow-x:auto; max-height:520px; overflow-y:auto;}
+table{width:100%; border-collapse:collapse; font-size:13px;}
+thead th{
+  position:sticky; top:0; z-index:2;
+  background:#13152a; text-align:left; padding:12px 16px;
+  font-size:11.5px; font-weight:700; color:var(--txt-2); text-transform:uppercase; letter-spacing:.4px;
+  border-bottom:1px solid var(--glass-brd); white-space:nowrap; cursor:pointer; user-select:none;
+}
+thead th:hover{color:var(--txt-0);}
+thead th .arrow{opacity:.4; margin-left:4px; font-size:10px;}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.045); transition:background .15s ease;}
+tbody tr:hover{background:rgba(255,255,255,.025);}
+tbody td{padding:12px 16px; color:var(--txt-1); white-space:nowrap;}
+tbody td.main{color:var(--txt-0); font-weight:600;}
+tbody td.num{font-variant-numeric:tabular-nums; font-weight:600; color:var(--txt-0);}
+.note-cell{white-space:normal; max-width:280px; color:var(--txt-2); font-size:12px;}
+
+.status-chip{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 10px; border-radius:99px; font-size:11.5px; font-weight:700;
+}
+.status-chip::before{content:''; width:6px; height:6px; border-radius:50%; background:currentColor;}
+.st-gagne{background:rgba(16,185,129,.14); color:#34d399;}
+.st-perdu{background:rgba(244,63,94,.14); color:#fb7185;}
+.st-relance{background:rgba(245,158,11,.14); color:#fbbf24;}
+.st-emise{background:rgba(56,189,248,.14); color:#38bdf8;}
+.st-confirme{background:rgba(16,185,129,.14); color:#34d399;}
+.st-planifier{background:rgba(245,158,11,.14); color:#fbbf24;}
+.st-termine{background:rgba(110,120,160,.18); color:#9ca3c9;}
+.st-proposition{background:rgba(168,85,247,.14); color:#c4b5fd;}
+.st-attente{background:rgba(245,158,11,.14); color:#fbbf24;}
+.st-programme{background:rgba(56,189,248,.14); color:#38bdf8;}
+.st-annule{background:rgba(244,63,94,.14); color:#fb7185;}
+
+.type-chip{
+  display:inline-flex; padding:3px 9px; border-radius:7px; font-size:11px; font-weight:600;
+  background:rgba(168,85,247,.12); color:#c4b5fd; border:1px solid rgba(168,85,247,.2);
+}
+
+/* ===== TODO ===== */
+.todo-list{display:flex; flex-direction:column; gap:8px;}
+.todo-item{
+  display:flex; align-items:center; gap:12px; padding:13px 16px;
+  background:rgba(255,255,255,.025); border:1px solid var(--glass-brd); border-radius:12px;
+  transition:all .18s ease;
+}
+.todo-item:hover{border-color:var(--glass-brd-hov);}
+.todo-item.done{opacity:.5;}
+.todo-check{
+  width:20px; height:20px; border-radius:7px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  border:1.5px solid var(--glass-brd-hov);
+}
+.todo-item.done .todo-check{background:var(--emerald); border-color:var(--emerald);}
+.todo-item.done .todo-check svg{width:12px; height:12px; color:#fff;}
+.todo-txt{flex:1; font-size:13.5px; font-weight:500;}
+.todo-item.done .todo-txt{text-decoration:line-through; color:var(--txt-2);}
+.todo-prio{font-size:10.5px; font-weight:800; text-transform:uppercase; padding:3px 8px; border-radius:6px; letter-spacing:.3px;}
+.todo-prio.urgent{background:rgba(244,63,94,.16); color:#fb7185;}
+.todo-prio.normal{background:rgba(110,120,160,.14); color:#9ca3c9;}
+.todo-date{font-size:11.5px; color:var(--txt-2); white-space:nowrap;}
+
+/* ===== RDV CARDS ===== */
+.rdv-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px;}
+.rdv-card{
+  background:rgba(255,255,255,.025); border:1px solid var(--glass-brd); border-radius:14px;
+  padding:18px; transition:all .2s ease;
+}
+.rdv-card:hover{border-color:var(--glass-brd-hov); transform:translateY(-2px);}
+.rdv-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px;}
+.rdv-title{font-size:14.5px; font-weight:700;}
+.rdv-contact{font-size:12.5px; color:var(--txt-2); margin-top:2px;}
+.rdv-meta{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--txt-1); margin-top:10px; flex-wrap:wrap;}
+.rdv-meta .item{display:flex; align-items:center; gap:5px;}
+.rdv-meta svg{width:13px; height:13px; color:var(--txt-2); flex-shrink:0;}
+.rdv-note{margin-top:10px; font-size:12px; color:var(--txt-2); padding-top:10px; border-top:1px solid rgba(255,255,255,.05); line-height:1.5;}
+.rdv-foot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,.05);}
+.rdv-status-select{
+  flex:1; background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); border-radius:9px;
+  padding:6px 10px; color:var(--txt-0); font-size:11.5px; font-weight:600;
+}
+.rdv-delete{
+  width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  background:rgba(244,63,94,.1); border:1px solid rgba(244,63,94,.25); color:#fb7185; transition:all .15s ease;
+}
+.rdv-delete:hover{background:rgba(244,63,94,.18);}
+.rdv-delete svg{width:14px; height:14px;}
+.rdv-empty{
+  grid-column:1/-1; text-align:center; padding:50px 20px; color:var(--txt-2); font-size:13.5px;
+  background:rgba(255,255,255,.02); border:1px dashed var(--glass-brd-hov); border-radius:16px;
+}
+
+/* ===== TICKER (bandeau actif accueil) ===== */
+.ticker-wrap{
+  display:flex; align-items:center; gap:16px;
+  background:linear-gradient(90deg, rgba(124,58,237,.14), rgba(236,72,153,.1));
+  border:1px solid rgba(168,85,247,.28); border-radius:16px;
+  padding:13px 18px; margin:24px 0 0; overflow:hidden;
+}
+.ticker-label{
+  display:flex; align-items:center; gap:7px; flex-shrink:0;
+  font-size:12.5px; font-weight:800; color:#e9d5ff; text-transform:uppercase; letter-spacing:.4px;
+  padding-right:16px; border-right:1px solid rgba(255,255,255,.12); cursor:pointer; white-space:nowrap;
+}
+.ticker-label svg{width:15px; height:15px; color:#c4b5fd;}
+.ticker-viewport{flex:1; overflow:hidden; position:relative; mask-image:linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); -webkit-mask-image:linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);}
+.ticker-track{display:flex; gap:38px; white-space:nowrap; width:max-content; animation:tickerScroll 26s linear infinite;}
+.ticker-wrap:hover .ticker-track{animation-play-state:paused;}
+@keyframes tickerScroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+.ticker-item{display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--txt-0); cursor:pointer;}
+.ticker-item .dot{width:6px; height:6px; border-radius:50%; background:#38bdf8; flex-shrink:0;}
+.ticker-item.urgent .dot{background:#fb7185; box-shadow:0 0 6px #fb7185;}
+.ticker-item .badge-urgent-mini{font-size:9.5px; font-weight:800; text-transform:uppercase; color:#fb7185; background:rgba(244,63,94,.15); padding:2px 6px; border-radius:5px;}
+
+/* ===== TODO PAGE V2 ===== */
+.todo-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px;}
+.todo-head-title h3{font-family:'Plus Jakarta Sans',sans-serif; font-size:22px; font-weight:800;}
+.todo-head-title p{font-size:13px; color:var(--txt-2); margin-top:2px;}
+.todo-view-tabs{display:flex; gap:8px; flex-wrap:wrap;}
+.todo-view-btn{font-size:12.5px; padding:9px 16px;}
+
+.todo-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px;}
+.todo-stat-card{
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:14px; padding:16px 18px; text-align:left;
+}
+.todo-stat-card .v{font-family:'Plus Jakarta Sans',sans-serif; font-size:26px; font-weight:800;}
+.todo-stat-card .l{font-size:11px; font-weight:700; color:var(--txt-2); text-transform:uppercase; letter-spacing:.4px; margin-top:2px;}
+.todo-stat-card.urgent .v{color:#fb7185;}
+.todo-stat-card.done .v{color:#34d399;}
+
+.todo-progress{height:7px; border-radius:99px; background:rgba(255,255,255,.06); overflow:hidden; margin-bottom:24px;}
+.todo-progress-fill{height:100%; border-radius:99px; background:linear-gradient(90deg,#6366f1,#10b981); transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+.todo-section-label{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:800; color:var(--txt-2); text-transform:uppercase; letter-spacing:.5px; margin:18px 0 10px;}
+.todo-section-label .sq{width:9px; height:9px; border-radius:3px;}
+.todo-section-label .sq.open{background:#f59e0b;}
+.todo-section-label .sq.closed{background:#34d399;}
+
+.todo-row{
+  display:flex; align-items:center; gap:13px; padding:13px 16px;
+  background:rgba(255,255,255,.025); border:1px solid var(--glass-brd); border-radius:12px; margin-bottom:8px;
+  transition:all .18s ease;
+}
+.todo-row:hover{border-color:var(--glass-brd-hov);}
+.todo-row.done{opacity:.55;}
+.todo-row-check{
+  width:20px; height:20px; border-radius:6px; flex-shrink:0; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; border:1.5px solid var(--glass-brd-hov); background:transparent;
+}
+.todo-row.done .todo-row-check{background:#6366f1; border-color:#6366f1;}
+.todo-row-check svg{width:12px; height:12px; color:#fff;}
+.todo-row-txt{flex:1; font-size:13.5px; font-weight:500; cursor:pointer;}
+.todo-row.done .todo-row-txt{text-decoration:line-through; color:var(--txt-2);}
+.todo-row-badge{font-size:10px; font-weight:800; text-transform:uppercase; padding:3px 8px; border-radius:6px; letter-spacing:.3px; flex-shrink:0;}
+.todo-row-badge.urgent{background:rgba(244,63,94,.16); color:#fb7185;}
+.todo-row-badge.normal{background:rgba(110,120,160,.14); color:#9ca3c9;}
+.todo-row-del{
+  width:24px; height:24px; border-radius:7px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  color:var(--txt-2); transition:all .15s ease;
+}
+.todo-row-del:hover{color:#fb7185; background:rgba(244,63,94,.1);}
+.todo-row-del svg{width:13px; height:13px;}
+@media (max-width:640px){ .todo-stats{grid-template-columns:repeat(2,1fr);} }
+
+/* ===== FOOTER ===== */
+footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); text-align:center; color:var(--txt-2); font-size:12.5px;}
+
+/* page switching */
+.page{display:none; animation:fadeIn .4s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+@media (max-width:1024px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .grid-2{grid-template-columns:1fr;}
+  .grid-3{grid-template-columns:1fr;}
+}
+@media (max-width:640px){
+  .kpi-grid{grid-template-columns:1fr;}
+  .topbar-inner{flex-wrap:wrap;}
+  .tabs{order:3; width:100%; overflow-x:auto;}
+  .hero h2{font-size:26px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+}
+
+/* ===== SAVE / EXPORT BUTTONS ===== */
+.icon-btn{
+  width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); color:var(--txt-1);
+  transition:all .18s ease; flex-shrink:0;
+}
+.icon-btn:hover{color:var(--txt-0); border-color:var(--glass-brd-hov); background:rgba(255,255,255,.07);}
+.icon-btn svg{width:16px; height:16px;}
+.save-status{display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--txt-2); font-weight:600; white-space:nowrap;}
+.save-status .dot{width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 6px #34d399;}
+.topbar-actions{display:flex; align-items:center; gap:8px;}
+
+/* ===== ADD FORM ===== */
+.form-card{
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow-card); margin-bottom:18px;
+}
+.form-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;}
+.form-head h4{font-size:15px; font-weight:700;}
+.form-head .sub{font-size:12px; color:var(--txt-2);}
+.preset-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px;}
+.preset-btn{
+  text-align:left; padding:13px 16px; border-radius:13px;
+  background:rgba(255,255,255,.025); border:1px solid var(--glass-brd); color:var(--txt-0);
+  transition:all .18s ease;
+}
+.preset-btn:hover{border-color:var(--glass-brd-hov); background:rgba(255,255,255,.05);}
+.preset-btn.selected{border-color:rgba(124,58,237,.55); background:rgba(124,58,237,.1);}
+.preset-btn .t{font-size:13.5px; font-weight:700; margin-bottom:3px;}
+.preset-btn .d{font-size:11.5px; color:var(--txt-2); line-height:1.4;}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.form-field{display:flex; flex-direction:column; gap:6px;}
+.form-field.full{grid-column:1/-1;}
+.form-field label{font-size:11px; font-weight:700; color:var(--txt-2); text-transform:uppercase; letter-spacing:.4px;}
+.form-field input, .form-field select, .form-field textarea{
+  background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); border-radius:10px;
+  padding:10px 13px; color:var(--txt-0); font-size:13.5px; font-family:inherit;
+}
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus{
+  outline:none; border-color:rgba(124,58,237,.5); background-color:rgba(124,58,237,.06);
+}
+.form-field textarea{resize:vertical; min-height:42px;}
+.form-actions{margin-top:18px; display:flex; gap:10px; justify-content:flex-end;}
+.btn{
+  padding:10px 20px; border-radius:11px; font-size:13.5px; font-weight:700; border:none;
+  display:inline-flex; align-items:center; gap:7px; transition:all .18s ease;
+}
+.btn-primary{background:var(--grad-hero); color:#fff; box-shadow:0 4px 14px rgba(124,58,237,.35);}
+.btn-primary:hover{filter:brightness(1.08); transform:translateY(-1px);}
+.btn-ghost{background:rgba(255,255,255,.05); color:var(--txt-1); border:1px solid var(--glass-brd);}
+.btn-ghost:hover{color:var(--txt-0); border-color:var(--glass-brd-hov);}
+.btn svg{width:15px; height:15px;}
+
+/* ===== ROW ACTIONS ===== */
+.row-actions{display:flex; gap:6px;}
+.row-btn{
+  padding:6px 11px; border-radius:8px; font-size:11.5px; font-weight:700;
+  background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); color:var(--txt-1);
+  transition:all .15s ease; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;
+}
+.row-btn:hover{color:var(--txt-0); border-color:var(--glass-brd-hov);}
+.row-btn.ca{color:#34d399; border-color:rgba(16,185,129,.3);}
+.row-btn.ca:hover{background:rgba(16,185,129,.1);}
+.row-btn svg{width:12px; height:12px;}
+
+/* ===== MODAL ===== */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(5,6,12,.6); backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  width:100%; max-width:560px; max-height:90vh; overflow-y:auto;
+  background:#11132380; background:linear-gradient(180deg,#161a30,#10122150);
+  background-color:#13152a; border:1px solid var(--glass-brd-hov); border-radius:20px;
+  padding:26px; box-shadow:0 24px 64px rgba(0,0,0,.5); animation:modalIn .25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes modalIn{from{opacity:0; transform:translateY(12px) scale(.98);} to{opacity:1; transform:translateY(0) scale(1);}}
+.modal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;}
+.modal-head h4{font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px;}
+.modal-close{width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.05); color:var(--txt-1);}
+.modal-close:hover{color:var(--txt-0); background:rgba(255,255,255,.1);}
+.modal-close svg{width:15px; height:15px;}
+
+/* ===== TOAST ===== */
+.toast-wrap{position:fixed; bottom:22px; right:22px; z-index:200; display:flex; flex-direction:column; gap:10px;}
+.toast{
+  display:flex; align-items:center; gap:10px; padding:13px 18px; border-radius:13px;
+  background:#171a30; border:1px solid var(--glass-brd-hov); box-shadow:0 12px 32px rgba(0,0,0,.4);
+  font-size:13px; font-weight:600; color:var(--txt-0); animation:toastIn .3s cubic-bezier(.4,0,.2,1); min-width:240px;
+}
+@keyframes toastIn{from{opacity:0; transform:translateX(30px);} to{opacity:1; transform:translateX(0);}}
+.toast.out{animation:toastOut .25s ease forwards;}
+@keyframes toastOut{to{opacity:0; transform:translateX(30px);}}
+.toast .ic{width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.toast.success .ic{background:rgba(16,185,129,.18); color:#34d399;}
+.toast .ic svg{width:12px; height:12px;}
+
+/* ===== COMMISSIONS PAGE ===== */
+.comm-head{
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  padding:24px; box-shadow:var(--shadow-card); margin-bottom:18px;
+}
+.comm-head h3{font-family:'Plus Jakarta Sans',sans-serif; font-size:19px; font-weight:700; margin-bottom:4px;}
+.comm-head .sub{font-size:13px; color:var(--txt-2); margin-bottom:14px;}
+.comm-pills{display:flex; gap:8px; flex-wrap:wrap;}
+.comm-pill{
+  display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700;
+  padding:7px 13px; border-radius:99px; background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); color:var(--txt-1);
+}
+.comm-pill svg{width:13px; height:13px;}
+
+.eye-toggle{
+  width:24px; height:24px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:var(--txt-1);
+  transition:all .15s ease; margin-left:2px;
+}
+.eye-toggle:hover{color:var(--txt-0); background:rgba(255,255,255,.12);}
+.eye-toggle.active{color:#c4b5fd; background:rgba(168,85,247,.18); border-color:rgba(168,85,247,.3);}
+.eye-toggle svg{width:13px; height:13px;}
+
+.period-nav{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
+  padding:16px 22px; margin-bottom:18px; flex-wrap:wrap;
+}
+.period-nav .lbl{font-size:12px; font-weight:700; color:var(--txt-2); text-transform:uppercase; letter-spacing:.4px;}
+.period-nav .ctr{display:flex; align-items:center; gap:14px;}
+.period-nav .cur{font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:800; min-width:130px; text-align:center;}
+.period-btn-group{display:flex; gap:8px;}
+
+.comm-panel{
+  background:rgba(255,255,255,.025); border:1px solid var(--glass-brd); border-radius:16px; padding:20px;
+}
+.comm-panel h5{font-size:13.5px; font-weight:700; margin-bottom:3px;}
+.comm-panel .ps{font-size:11.5px; color:var(--txt-2); margin-bottom:16px;}
+.comm-source{
+  display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+  padding:3px 9px; border-radius:7px; margin-top:8px;
+}
+.comm-source.auto{background:rgba(56,189,248,.13); color:#38bdf8;}
+.comm-source.manual{background:rgba(245,158,11,.13); color:#fbbf24;}
+.comm-row{display:flex; gap:10px; align-items:flex-end;}
+.comm-row .form-field{flex:1;}
+.comm-note{font-size:11.5px; color:var(--txt-2); margin-top:10px; line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner wrap" style="padding-left:0;padding-right:0;">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+      </div>
+      <div class="brand-txt">
+        <h1>Bilan Commercial</h1>
+        <p>Jordan Boissonnade · Secteur Nord-Est</p>
+      </div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-page="accueil">Accueil</button>
+      <button class="tab-btn" data-page="pipeline">Pipeline</button>
+      <button class="tab-btn" data-page="ca">CA</button>
+      <button class="tab-btn" data-page="commissions">Commissions</button>
+      <button class="tab-btn" data-page="rdv">RDV</button>
+      <button class="tab-btn" data-page="todo">Tâches</button>
+    </div>
+    <div class="topbar-actions">
+      <div class="save-status" id="save-status"><span class="dot"></span><span id="save-status-text">Sauvegardé</span></div>
+      <button class="icon-btn" id="btn-export" title="Exporter en JSON" aria-label="Exporter en JSON">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-import" title="Importer un JSON" aria-label="Importer un JSON">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </button>
+      <input type="file" id="file-import" accept=".json" style="display:none;">
+    </div>
+    <div class="badge-archive">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+      Archive 2026
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="hero-eyebrow">Export du 19/06/2026</span>
+    <h2>Synthèse de l'activité commerciale archivée</h2>
+    <p class="sub">Vue consolidée des offres, du chiffre d'affaires, des rendez-vous et des commissions de la période Nord-Est, avant bascule sur le secteur Sud-Ouest.</p>
+  </div>
+
+  <!-- ================= PAGE ACCUEIL ================= -->
+  <div class="page active" id="page-accueil">
+
+    <div class="ticker-wrap" id="task-ticker-wrap" style="display:none;">
+      <div class="ticker-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span id="ticker-count">0</span> active<span id="ticker-plural"></span>
+      </div>
+      <div class="ticker-viewport">
+        <div class="ticker-track" id="ticker-track"></div>
+      </div>
+    </div>
+
+    <section>
+      <div class="kpi-grid" id="kpi-grid"></div>
+    </section>
+
+    <section>
+      <div class="section-head"><h3>Objectif annuel</h3><span class="hint">Basé sur le CA cumulé des commissions mensuelles</span></div>
+      <div class="obj-card">
+        <div class="obj-ring-wrap">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#ec4899"/>
+              </linearGradient>
+            </defs>
+            <circle class="obj-ring-bg" cx="70" cy="70" r="58"/>
+            <circle class="obj-ring-fg" id="obj-ring-circle" cx="70" cy="70" r="58" stroke-dasharray="364" stroke-dashoffset="364"/>
+          </svg>
+          <div class="obj-ring-center"><div class="pct" id="obj-pct">0%</div><div class="lbl">de l'objectif</div></div>
+        </div>
+        <div class="obj-info">
+          <h4>Objectif fixé : 500 000 €</h4>
+          <div class="obj-stats">
+            <div class="obj-stat"><div class="v" id="obj-ca">0 €</div><div class="l">CA cumulé</div></div>
+            <div class="obj-stat"><div class="v" id="obj-restant">0 €</div><div class="l">Restant à faire</div></div>
+            <div class="obj-stat"><div class="v" id="obj-moy">0 €</div><div class="l">Moyenne mensuelle</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><h3>Entonnoir des offres</h3><span class="hint">Répartition par statut</span></div>
+      <div class="chart-card">
+        <div class="funnel" id="funnel"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-2">
+        <div class="chart-card">
+          <h4>Évolution du CA</h4>
+          <div class="sub">Chiffre d'affaires facturé par mois (caData)</div>
+          <canvas id="chartCaTrend"></canvas>
+        </div>
+        <div class="chart-card">
+          <h4>Commissions mensuelles</h4>
+          <div class="sub">CA entreprise vs. revenu personnel</div>
+          <canvas id="chartCommissions"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ================= PAGE PIPELINE ================= -->
+  <div class="page" id="page-pipeline">
+    <section style="padding-top:0;">
+      <div class="form-card">
+        <div class="form-head">
+          <h4>Ajouter une offre</h4>
+          <span class="sub">Saisie rapide et plus intuitive</span>
+        </div>
+        <div class="preset-row" id="offre-presets">
+          <button type="button" class="preset-btn" data-preset="urgent">
+            <div class="t">Urgent</div>
+            <div class="d">Date d'émission proche, décision rapide, action immédiate.</div>
+          </button>
+          <button type="button" class="preset-btn selected" data-preset="validation">
+            <div class="t">En validation</div>
+            <div class="d">Offre envoyée, retour attendu, potentiel élevé.</div>
+          </button>
+          <button type="button" class="preset-btn" data-preset="relance">
+            <div class="t">Relance / attente / perdu</div>
+            <div class="d">Catégorise proprement pour piloter tes relances.</div>
+          </button>
+        </div>
+        <form id="offre-form">
+          <div class="form-grid">
+            <div class="form-field"><label>Client</label><input type="text" id="f-client" placeholder="Ex : CIMES / Frédéric CHUPIN" required></div>
+            <div class="form-field"><label>Produit / solution</label><input type="text" id="f-produit" placeholder="Ex : Shock300 ×10 Madgetech"></div>
+            <div class="form-field"><label>Montant HT (€)</label><input type="number" id="f-montant" step="0.01" min="0" placeholder="0" required></div>
+            <div class="form-field"><label>N° offre</label><input type="text" id="f-num" placeholder="026Q24XXX"></div>
+            <div class="form-field"><label>Date d'émission</label><input type="text" id="f-date" placeholder="Ex : 28/03/2026"></div>
+            <div class="form-field">
+              <label>Statut</label>
+              <select id="f-statut">
+                <option value="émise">Émise</option>
+                <option value="relance" selected>En validation</option>
+                <option value="gagné">Gagné</option>
+                <option value="perdu">Perdu</option>
+              </select>
+            </div>
+            <div class="form-field full"><label>Notes</label><textarea id="f-notes" placeholder="Notes libres, prochaine étape, relance..."></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Ajouter l'offre
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <section style="padding-top:0;">
+      <div class="grid-3">
+        <div class="chart-card"><h4>Statut des offres</h4><div class="sub">Répartition en nombre</div><canvas id="chartStatutDonut"></canvas></div>
+        <div class="chart-card" style="grid-column:span 2;"><h4>Montant par statut</h4><div class="sub">Valeur cumulée des offres (€)</div><canvas id="chartMontantStatut"></canvas></div>
+      </div>
+    </section>
+    <section>
+      <div class="table-card">
+        <div class="table-toolbar">
+          <input type="text" class="search-input" id="offres-search" placeholder="Rechercher un client, produit, numéro...">
+          <div class="filter-pills" id="offres-filters">
+            <button class="pill active" data-statut="all">Toutes</button>
+            <button class="pill" data-statut="gagné">Gagné</button>
+            <button class="pill" data-statut="émise">Émise</button>
+            <button class="pill" data-statut="relance">Relance</button>
+            <button class="pill" data-statut="perdu">Perdu</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-key="num">N° offre <span class="arrow"></span></th>
+                <th data-key="client">Client <span class="arrow"></span></th>
+                <th data-key="produit">Produit <span class="arrow"></span></th>
+                <th data-key="montant">Montant <span class="arrow"></span></th>
+                <th data-key="date">Date <span class="arrow"></span></th>
+                <th data-key="statut">Statut <span class="arrow"></span></th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="offres-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= MODAL: EDIT OFFRE ================= -->
+  <div class="modal-overlay" id="modal-edit">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h4>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+          Modifier l'offre
+        </h4>
+        <button class="modal-close" id="modal-edit-close" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="e-id">
+        <div class="form-grid">
+          <div class="form-field"><label>Client</label><input type="text" id="e-client" required></div>
+          <div class="form-field"><label>Produit / solution</label><input type="text" id="e-produit"></div>
+          <div class="form-field"><label>Montant HT (€)</label><input type="number" id="e-montant" step="0.01" min="0" required></div>
+          <div class="form-field"><label>N° offre</label><input type="text" id="e-num"></div>
+          <div class="form-field"><label>Date d'émission</label><input type="text" id="e-date"></div>
+          <div class="form-field">
+            <label>Statut</label>
+            <select id="e-statut">
+              <option value="émise">Émise</option>
+              <option value="relance">En validation</option>
+              <option value="gagné">Gagné</option>
+              <option value="perdu">Perdu</option>
+            </select>
+          </div>
+          <div class="form-field full"><label>Notes</label><textarea id="e-notes"></textarea></div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="edit-cancel">Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Enregistrer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= PAGE CA ================= -->
+  <div class="page" id="page-ca">
+    <section style="padding-top:0;">
+      <div class="kpi-grid" id="ca-kpi-grid"></div>
+    </section>
+    <section>
+      <div class="chart-card">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div>
+            <h4>Revenu personnel vs. objectif</h4>
+            <div class="sub">Courbe CA mensuelle · Mon CA personnel par mois</div>
+          </div>
+          <select id="comm-perso-year" style="background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); border-radius:10px; padding:7px 12px; color:var(--txt-0); font-size:13px; font-weight:600;"></select>
+        </div>
+        <canvas id="chartPersonnel" style="max-height:260px; margin-top:14px;"></canvas>
+      </div>
+    </section>
+    <section>
+      <div class="section-head"><h3>Détail du CA facturé</h3><span class="hint" id="ca-count"></span></div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th data-key="client" data-tbl="ca">Client <span class="arrow"></span></th>
+              <th data-key="produit" data-tbl="ca">Référence <span class="arrow"></span></th>
+              <th data-key="montant" data-tbl="ca">Montant <span class="arrow"></span></th>
+              <th data-key="periode" data-tbl="ca">Période <span class="arrow"></span></th>
+            </tr></thead>
+            <tbody id="ca-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= PAGE COMMISSIONS ================= -->
+  <div class="page" id="page-commissions">
+    <section style="padding-top:0;">
+      <div class="comm-head">
+        <h3>Mes Commissions</h3>
+        <p class="sub">Calcul automatique de tes commissions mensuelles à partir de ton onglet Mon CA, avec saisie manuelle du CA société et simulation de salaire.</p>
+        <div class="comm-pills">
+          <span class="comm-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><span id="comm-pill-amount">0 € commission</span></span>
+          <span class="comm-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span id="comm-pill-period">—</span></span>
+          <span class="comm-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span id="comm-pill-net">0 € net estimé</span>
+            <button type="button" class="eye-toggle" id="comm-net-eye" title="Masquer / afficher le montant" aria-label="Masquer ou afficher le salaire net">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <div class="period-nav">
+        <span class="lbl">Période</span>
+        <div class="ctr">
+          <button class="btn btn-ghost" id="comm-prev">‹ Préc.</button>
+          <span class="cur" id="comm-period-label">—</span>
+          <button class="btn btn-ghost" id="comm-next">Suiv. ›</button>
+        </div>
+        <button class="btn btn-ghost" id="comm-today">Mois en cours</button>
+      </div>
+
+      <div class="kpi-grid" id="comm-kpi-grid" style="margin-bottom:18px;"></div>
+
+      <div class="grid-2" style="grid-template-columns:1fr 1fr;">
+        <div class="comm-panel">
+          <h5>Mon CA Personnel</h5>
+          <div class="ps" id="comm-perso-period">— · auto</div>
+          <div class="form-field">
+            <label>CA détecté automatiquement (€ HT)</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="comm-perso-auto" disabled style="flex:1; opacity:.8;">
+              <button class="btn btn-ghost" id="comm-goto-ca" type="button" style="white-space:nowrap;">→ Mon CA</button>
+            </div>
+          </div>
+          <div class="comm-source auto" id="comm-perso-source-tag">Source : Mon CA — auto</div>
+          <div class="form-field" style="margin-top:14px;">
+            <label>Override manuel (laisser vide pour auto)</label>
+            <div class="comm-row">
+              <input type="number" id="comm-perso-override" step="0.01" placeholder="Forcer une valeur (€)">
+              <button class="btn-primary btn" id="comm-perso-save" type="button" style="padding:10px 14px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+              </button>
+              <button class="btn-ghost btn" id="comm-perso-reset" type="button" style="padding:10px 14px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="comm-note">Reprend automatiquement le CA de <strong>Mon CA</strong> du mois précédent. Override possible via le champ ci-dessus.<br>Commission perso (<span id="comm-rate-label">1%</span>) : <strong id="comm-perso-commission">0 €</strong></div>
+        </div>
+
+        <div class="comm-panel">
+          <h5>CA Société</h5>
+          <div class="ps" id="comm-soc-period">— · saisie manuelle uniquement</div>
+          <div class="form-field">
+            <label>CA Société du mois (€ HT)</label>
+            <div class="comm-row">
+              <input type="number" id="comm-soc-input" step="0.01" placeholder="0">
+              <button class="btn-primary btn" id="comm-soc-save" type="button" style="padding:10px 14px; white-space:nowrap;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                Enregistrer
+              </button>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <div class="ps" style="margin-bottom:4px;">CA Société enregistré</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif; font-size:19px; font-weight:800; color:#34d399;" id="comm-soc-saved">0,00 €</div>
+            <div class="comm-source manual" id="comm-soc-source-tag" style="margin-top:8px;">Source : Saisie manuelle</div>
+          </div>
+          <div class="comm-note">Le fichier WAP a été retiré. La facturation société se fait uniquement en saisie manuelle.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= PAGE RDV ================= -->
+  <div class="page" id="page-rdv">
+    <section style="padding-top:0;">
+      <div class="form-card">
+        <div class="form-head">
+          <h4>Ajouter un rendez-vous</h4>
+          <span class="sub">Crée un nouveau RDV et suis son statut</span>
+        </div>
+        <form id="rdv-form">
+          <div class="form-grid">
+            <div class="form-field"><label>Titre / société</label><input type="text" id="r-titre" placeholder="Ex : EXAIL" required></div>
+            <div class="form-field"><label>Contact</label><input type="text" id="r-contact" placeholder="Ex : Sylvain Pouts"></div>
+            <div class="form-field"><label>Date</label><input type="date" id="r-date" required></div>
+            <div class="form-field"><label>Heure</label><input type="time" id="r-heure"></div>
+            <div class="form-field">
+              <label>Type</label>
+              <select id="r-type">
+                <option value="Visio">Visio</option>
+                <option value="Présentiel">Présentiel</option>
+                <option value="Téléphone">Téléphone</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Statut</label>
+              <select id="r-statut">
+                <option value="proposition">Proposition</option>
+                <option value="attente de date">Attente de date</option>
+                <option value="programmé" selected>Programmé</option>
+                <option value="confirmé">Confirmé</option>
+                <option value="terminé">Terminé</option>
+                <option value="annulé">Annulé</option>
+              </select>
+            </div>
+            <div class="form-field"><label>Lieu</label><input type="text" id="r-lieu" placeholder="Ex : site client / visio"></div>
+            <div class="form-field full"><label>Note</label><textarea id="r-note" placeholder="Objectif du RDV, contexte..."></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Ajouter le RDV
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h3>Rendez-vous</h3>
+        <span class="hint" id="rdv-count"></span>
+      </div>
+      <div class="filter-pills" id="rdv-filters" style="margin-bottom:16px;">
+        <button class="pill active" data-statut="all">Tous</button>
+        <button class="pill" data-statut="proposition">Proposition</button>
+        <button class="pill" data-statut="attente de date">Attente de date</button>
+        <button class="pill" data-statut="programmé">Programmé</button>
+        <button class="pill" data-statut="confirmé">Confirmé</button>
+        <button class="pill" data-statut="terminé">Terminé</button>
+        <button class="pill" data-statut="annulé">Annulé</button>
+      </div>
+      <div class="rdv-grid" id="rdv-grid"></div>
+    </section>
+  </div>
+
+  <!-- ================= PAGE TODO ================= -->
+  <div class="page" id="page-todo">
+    <section style="padding-top:0;">
+      <div class="todo-head">
+        <div class="todo-head-title">
+          <h3 id="todo-date-title">→ Tâches</h3>
+          <p id="todo-date-sub">Tes tâches</p>
+        </div>
+        <div class="todo-view-tabs">
+          <button class="btn btn-ghost todo-view-btn" data-view="today">Aujourd'hui</button>
+          <button class="btn btn-primary todo-view-btn" data-view="tomorrow">→ Demain</button>
+          <button class="btn btn-ghost todo-view-btn" data-view="done">Terminées</button>
+        </div>
+      </div>
+
+      <div class="form-card" style="padding:16px 20px; margin-bottom:18px;">
+        <form id="todo-form" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <input type="text" id="t-text" class="search-input" style="background-image:none; padding-left:14px;" placeholder="Nouvelle tâche... (ex: Appeler VALEO, Envoyer offre...)" required>
+          <div class="filter-pills" id="t-priority-toggle">
+            <button type="button" class="pill active" data-priority="normal">⚡ Normal</button>
+            <button type="button" class="pill" data-priority="urgent">● Urgent</button>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Ajouter
+          </button>
+        </form>
+      </div>
+
+      <div class="todo-stats">
+        <div class="todo-stat-card"><div class="v" id="todo-stat-total">0</div><div class="l">Total</div></div>
+        <div class="todo-stat-card urgent"><div class="v" id="todo-stat-urgent">0</div><div class="l">Urgent</div></div>
+        <div class="todo-stat-card"><div class="v" id="todo-stat-open">0</div><div class="l">À faire</div></div>
+        <div class="todo-stat-card done"><div class="v" id="todo-stat-done">0</div><div class="l">Terminé</div></div>
+      </div>
+
+      <div class="todo-progress"><div class="todo-progress-fill" id="todo-progress-fill" style="width:0%"></div></div>
+
+      <div id="todo-list-wrap"></div>
+    </section>
+  </div>
+
+  <footer>Dashboard généré à partir de l'archive <code>dashboard_jordan_v6_backup.json</code> · Export du 19/06/2026</footer>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ===================== DONNÉES ===================== */
+const DATA = {
+  "version": 7,
+  "exportDate": "2026-06-19T08:05:05.784Z",
+  "settings": {
+    "theme": "light",
+    "objectif": 500000,
+    "activePage": "ca",
+    "lastBackupAt": "2026-06-19T07:41:15.496Z"
+  },
+  "data": {
+    "offres": [
+      {
+        "id": 10,
+        "num": "026Q24441",
+        "client": "Frédéric CHUPIN",
+        "produit": "Shock300 / MagMount",
+        "montant": 6642.72,
+        "date": "05/03/2026",
+        "statut": "relance",
+        "notes": "Relances effectué avec explication et précisions sur les conditions d'utilisation en attente cotés client du cotés de Mr CHUPIN"
+      },
+      {
+        "id": 11,
+        "num": "026Q24488",
+        "client": "Gérald DHERBOMEZ",
+        "produit": "PC FANLESS",
+        "montant": 36142,
+        "date": "22/04/2026",
+        "statut": "relance",
+        "notes": "3x Offre à faire pour les 2 besoins de monsieur DHERBOMEZ voir mail • Basculée en commande • Basculée en commande"
+      },
+      {
+        "id": 12,
+        "num": "025Q24215",
+        "client": "Christian FOESSER",
+        "produit": "SecureSync 2400",
+        "montant": 9699.6,
+        "date": "16/01/2025",
+        "statut": "perdu",
+        "notes": ""
+      },
+      {
+        "id": 13,
+        "num": "026Q24489",
+        "client": "Gérard BOUCHARD",
+        "produit": "HiTemp140X2-F P-6 - 902335-00",
+        "montant": 1785,
+        "date": "26/03/2026",
+        "statut": "gagné",
+        "notes": "2 offre faites celle-ci initiale et une autre avec HiTempTS • Basculée en commande"
+      },
+      {
+        "id": 14,
+        "num": "026Q24394",
+        "client": "Adrien BIGOT",
+        "produit": "TCTempX8LCD Madgetech",
+        "montant": 1418,
+        "date": "13/03/2026",
+        "statut": "gagné",
+        "notes": "Basculée en commande"
+      },
+      {
+        "id": 16,
+        "num": "026Q24465",
+        "client": "Valery Jacob",
+        "produit": "DASYLab",
+        "montant": 2382,
+        "date": "17/03/2026",
+        "statut": "gagné",
+        "notes": "Relance faites le 25/03/2026 • Basculée en commande • Basculée en commande"
+      },
+      {
+        "id": 17,
+        "num": "026Q24511",
+        "client": "Holdelec",
+        "produit": "contact récepteur coaxial femelle RG316 MAC Panel",
+        "montant": 1211,
+        "date": "07/04/2026",
+        "statut": "gagné",
+        "notes": "Antoine Daudré émise par mail le 07 avril 2026 • Basculée en commande"
+      },
+      {
+        "id": 18,
+        "num": "026Q24529",
+        "client": "Holdelec",
+        "produit": "MAC-PANEL 0884010-11",
+        "montant": 3090,
+        "date": "10/04/2026",
+        "statut": "relance",
+        "notes": ""
+      },
+      {
+        "id": 19,
+        "num": "026Q24518",
+        "client": "APERAM Mr Naudin",
+        "produit": "VTI / AMETEK EMX-4251",
+        "montant": 28061,
+        "date": "10/04/2026",
+        "statut": "émise",
+        "notes": "Naudin , offre déja émise en 2016 nouvelle config budget 20/30k"
+      },
+      {
+        "id": 20,
+        "num": "026Q24535",
+        "client": "Normaclass",
+        "produit": "USB-7830",
+        "montant": 1545,
+        "date": "14/04/2026",
+        "statut": "relance",
+        "notes": ""
+      },
+      {
+        "id": 21,
+        "num": "026Q24547",
+        "client": "Automatica",
+        "produit": "MVP-3125",
+        "montant": 3460,
+        "date": "17/04/2026",
+        "statut": "perdu",
+        "notes": ""
+      },
+      {
+        "id": 22,
+        "num": "026Q24559",
+        "client": "Innovelec",
+        "produit": "2238/A223801",
+        "montant": 28913,
+        "date": "21/04/2026",
+        "statut": "émise",
+        "notes": ""
+      },
+      {
+        "id": 23,
+        "num": "026Q24561",
+        "client": "Technix",
+        "produit": "C-4807-TC",
+        "montant": 4404,
+        "date": "22/04/2026",
+        "statut": "perdu",
+        "notes": ""
+      },
+      {
+        "id": 24,
+        "num": "026Q24572",
+        "client": "Sertt",
+        "produit": "Expert Logger 100",
+        "montant": 5568,
+        "date": "23/04/2026",
+        "statut": "relance",
+        "notes": ""
+      },
+      {
+        "id": 25,
+        "num": "026Q24466",
+        "client": "Atlas",
+        "produit": "Expert Key ",
+        "montant": 3419,
+        "date": "17/03/2026",
+        "statut": "gagné",
+        "notes": "Jules Valette • Basculée en commande"
+      },
+      {
+        "id": 26,
+        "num": "026Q24578",
+        "client": "Safran",
+        "produit": "UEIPAC 400F",
+        "montant": 16105,
+        "date": "01/05/2026",
+        "statut": "relance",
+        "notes": "Passe de Charles • Basculée en commande"
+      },
+      {
+        "id": 27,
+        "num": "026Q24598",
+        "client": "Exail",
+        "produit": "Cable breakout ",
+        "montant": 788,
+        "date": "05/05/2026",
+        "statut": "gagné",
+        "notes": "Cable manquant (Mr Pouts)  • Basculée en commande"
+      },
+      {
+        "id": 28,
+        "num": "026Q24596",
+        "client": "Smart Tree",
+        "produit": "PCIe-7396",
+        "montant": 1488,
+        "date": "05/05/2026",
+        "statut": "gagné",
+        "notes": "Monsieur Michez/Laraaj • Basculée en commande"
+      },
+      {
+        "id": 29,
+        "num": "026Q24599",
+        "client": "Atelier H",
+        "produit": "HiTemp140",
+        "montant": 639,
+        "date": "05/05/2026",
+        "statut": "relance",
+        "notes": "Sonde et IFC400 Mme Heckmann"
+      },
+      {
+        "id": 30,
+        "num": "026Q24568",
+        "client": "Bush Group",
+        "produit": "Advantech",
+        "montant": 3212,
+        "date": "22/04/2026",
+        "statut": "gagné",
+        "notes": "Nathan Galley • Basculée en commande"
+      },
+      {
+        "id": 31,
+        "num": "026Q24615",
+        "client": "Thinkfon Tech GmbH",
+        "produit": "PS48402",
+        "montant": 11196,
+        "date": "12/05/2026",
+        "statut": "relance",
+        "notes": "Urgent produit en fin de vie "
+      },
+      {
+        "id": 32,
+        "num": "026Q24617",
+        "client": "Sacmo",
+        "produit": "LPCIe-7250",
+        "montant": 536,
+        "date": "13/05/2026",
+        "statut": "émise",
+        "notes": "Gaëtan Paul-Caron"
+      },
+      {
+        "id": 33,
+        "num": "026Q24634",
+        "client": "Eurodistech",
+        "produit": "LPCI-3488A",
+        "montant": 2080,
+        "date": "20/05/2026",
+        "statut": "relance",
+        "notes": "Madame Bielm (offre proforma luxembourg)"
+      },
+      {
+        "id": 34,
+        "num": "026Q24633",
+        "client": "Larisys",
+        "produit": "PCI7434",
+        "montant": 367,
+        "date": "20/05/2026",
+        "statut": "perdu",
+        "notes": "Eric Mathie"
+      },
+      {
+        "id": 35,
+        "num": "026Q24647",
+        "client": "LPIM",
+        "produit": "USB 1808X",
+        "montant": 1054,
+        "date": "27/05/2026",
+        "statut": "émise",
+        "notes": "Monsieur Christophe Ley "
+      },
+      {
+        "id": 36,
+        "num": "026Q24644",
+        "client": "Ezatt",
+        "produit": "Hitemp140-1",
+        "montant": 550,
+        "date": "27/05/2026",
+        "statut": "émise",
+        "notes": "Madame Polini (Malte)"
+      },
+      {
+        "id": 37,
+        "num": "026Q24654",
+        "client": "Innovelec",
+        "produit": "HPC-7242",
+        "montant": 3800,
+        "date": "29/05/2026",
+        "statut": "gagné",
+        "notes": "Ayari , Balsenq config • Basculée en commande"
+      },
+      {
+        "id": 38,
+        "num": "026Q24675",
+        "client": "Safran La Courneuve",
+        "produit": "Shock 300",
+        "montant": 1692,
+        "date": "09/06/2026",
+        "statut": "émise",
+        "notes": ""
+      },
+      {
+        "id": 39,
+        "num": "026Q24674",
+        "client": "Université La réunion",
+        "produit": "RHTemp1000IS",
+        "montant": 2216,
+        "date": "09/06/2026",
+        "statut": "gagné",
+        "notes": "Basculée en commande"
+      },
+      {
+        "id": 41,
+        "num": "026Q24690",
+        "client": "Univ Fcomte",
+        "produit": "DASYLab SL Full license",
+        "montant": 17528,
+        "date": "12/06/2026",
+        "statut": "émise",
+        "notes": "Monsieur Guyout"
+      },
+      {
+        "id": 42,
+        "num": "026Q24688",
+        "client": "Holdelec",
+        "produit": "KIT, STRAIN RELIEF",
+        "montant": 2731,
+        "date": "11/06/2026",
+        "statut": "émise",
+        "notes": "Mr Daudre (Sabrina Achat)"
+      },
+      {
+        "id": 44,
+        "num": "026Q24697",
+        "client": "Biochem",
+        "produit": "Hitemp-1",
+        "montant": 3766,
+        "date": "19/06/2026",
+        "statut": "émise",
+        "notes": "Brahim KHIAT"
+      },
+      {
+        "id": 45,
+        "num": "026Q24696",
+        "client": "Elexis",
+        "produit": "TSync",
+        "montant": 1787,
+        "date": "16/06/2026",
+        "statut": "émise",
+        "notes": "Seilles Nicolas"
+      },
+      {
+        "id": 46,
+        "num": "026Q24701",
+        "client": "Univ Savoie",
+        "produit": "PCIe-9834P",
+        "montant": 2294,
+        "date": "17/07/2026",
+        "statut": "émise",
+        "notes": "Mr Dumain"
+      },
+      {
+        "id": 47,
+        "num": "026Q24700",
+        "client": "Ariane Group",
+        "produit": "EK-4-0100",
+        "montant": 3898,
+        "date": "17/07/2026",
+        "statut": "gagné",
+        "notes": "Mr Genevoix • Basculée en commande"
+      }
+    ],
+    "caData": [
+      {
+        "client": "Sylvain POUTS",
+        "produit": "026Q24480",
+        "montant": 3144,
+        "mois": 2,
+        "annee": 2026
+      },
+      {
+        "client": "Romain MICHOULIER",
+        "produit": "026Q24482",
+        "montant": 280.8,
+        "mois": 2,
+        "annee": 2026
+      },
+      {
+        "client": "Essilor",
+        "produit": "4551801799",
+        "montant": 1536,
+        "mois": 2,
+        "annee": 2026
+      },
+      {
+        "client": "Adrien BIGOT",
+        "produit": "026Q24394",
+        "montant": 1418,
+        "mois": 2,
+        "annee": 2026,
+        "date": "2026-03-31",
+        "commentaire": ""
+      },
+      {
+        "client": "Gérard BOUCHARD",
+        "produit": "026Q24489",
+        "montant": 1785,
+        "mois": 3,
+        "annee": 2026
+      },
+      {
+        "client": "Holdelec",
+        "produit": "026Q24511",
+        "montant": 1211,
+        "mois": 3,
+        "annee": 2026
+      },
+      {
+        "client": "Valery Jacob",
+        "produit": "026Q24465",
+        "montant": 2382,
+        "mois": 3,
+        "annee": 2026
+      },
+      {
+        "client": "Atlas",
+        "produit": "026Q24466",
+        "montant": 3419,
+        "mois": 4,
+        "annee": 2026
+      },
+      {
+        "client": "Bush Group",
+        "produit": "026Q24568",
+        "montant": 3212,
+        "mois": 4,
+        "annee": 2026
+      },
+      {
+        "client": "Exail",
+        "produit": "026Q24598",
+        "montant": 788,
+        "mois": 4,
+        "annee": 2026
+      },
+      {
+        "client": "Smart Tree",
+        "produit": "026Q24596",
+        "montant": 1488,
+        "mois": 5,
+        "annee": 2026
+      },
+      {
+        "client": "Université La réunion",
+        "produit": "026Q24674",
+        "montant": 2216,
+        "mois": 5,
+        "annee": 2026
+      },
+      {
+        "client": "Innovelec",
+        "produit": "026Q24654",
+        "montant": 3800,
+        "mois": 5,
+        "annee": 2026
+      },
+      {
+        "client": "Ariane Group",
+        "produit": "026Q24700",
+        "montant": 3898,
+        "mois": 5,
+        "annee": 2026
+      }
+    ],
+    "potData": [],
+    "rdvData": [],
+    "prospectionDone": {},
+    "nextId": 48,
+    "todoData": []
+  },
+  "commissions": {
+    "2026-03": {
+      "yearMonth": "2026-03",
+      "personalRevenue": 4960,
+      "companyRevenue": 0,
+      "companyRevenueSource": "manual",
+      "wapFileName": "Copie de WAP S13 2026 30 03 2026 0954.xlsx",
+      "lastImportDate": "2026-03-30T09:03:19.542Z"
+    },
+    "2026-04": {
+      "yearMonth": "2026-04",
+      "companyRevenue": 248479,
+      "companyRevenueSource": "manual"
+    },
+    "2026-02": {
+      "yearMonth": "2026-02",
+      "companyRevenue": 0,
+      "companyRevenueSource": "manual"
+    },
+    "2026-05": {
+      "yearMonth": "2026-05",
+      "companyRevenue": 233885,
+      "companyRevenueSource": "manual",
+      "personalRevenueOverride": 5378
+    },
+    "2026-06": {
+      "yearMonth": "2026-06",
+      "companyRevenue": 220973,
+      "companyRevenueSource": "manual"
+    }
+  }
+};
+
+/* ===================== PERSISTANCE ===================== */
+const STORAGE_KEY = 'dashboard_backup_2026_state';
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ console.warn('Lecture localStorage impossible', e); }
+  return null;
+}
+const saved = loadState();
+const STATE = saved || JSON.parse(JSON.stringify(DATA));
+
+let offres = STATE.data.offres;
+let caData = STATE.data.caData;
+let rdvData = STATE.data.rdvData;
+let todoData = STATE.data.todoData;
+let commissions = STATE.commissions;
+const objectif = STATE.settings.objectif;
+let nextOffreId = STATE.data.nextId || (Math.max(0,...offres.map(o=>o.id||0))+1);
+
+function persist(){
+  STATE.data.offres = offres;
+  STATE.data.caData = caData;
+  STATE.data.rdvData = rdvData;
+  STATE.data.todoData = todoData;
+  STATE.data.nextId = nextOffreId;
+  STATE.commissions = commissions;
+  STATE.settings.lastBackupAt = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  const statusText = document.getElementById('save-status-text');
+  if(statusText){
+    statusText.textContent = 'Sauvegardé';
+    document.getElementById('save-status').querySelector('.dot').style.background = '#34d399';
+  }
+}
+
+/* ===================== TOAST ===================== */
+function toast(msg, type='success'){
+  const wrap = document.getElementById('toast-wrap');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>${msg}</span>`;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(), 260); }, 2600);
+}
+
+const MOIS_FR = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
+const MOIS_LONG_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const fmtMoney = n => (n||0).toLocaleString('fr-FR',{maximumFractionDigits:0}) + ' €';
+const fmtMoneyFull = n => (n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
+
+/* ===================== NAVIGATION ===================== */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+  });
+});
+
+const ICONS = {
+  euro:'<path d="M19 5H9.5a3.5 3.5 0 0 0 0 7H13a3.5 3.5 0 0 1 0 7H6"/><path d="M6 9h7"/><path d="M6 13h6"/>',
+  check:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+  trend:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  pipeline:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+  salaire:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+};
+const STATUTS_ORDER = ['émise','relance','gagné','perdu'];
+const STATUT_LABEL = {émise:'Émise', relance:'En relance', gagné:'Gagnée', perdu:'Perdue'};
+const STATUT_COLOR = {émise:'linear-gradient(90deg,#38bdf8,#0ea5e9)', relance:'linear-gradient(90deg,#f59e0b,#d97706)', gagné:'linear-gradient(90deg,#10b981,#059669)', perdu:'linear-gradient(90deg,#f43f5e,#be123c)'};
+const STATUT_CHIP_CLASS = {gagné:'st-gagne', perdu:'st-perdu', relance:'st-relance', émise:'st-emise'};
+const R = 58, CIRC = 2*Math.PI*R;
+
+Chart.defaults.color = '#aeb2c9';
+Chart.defaults.font.family = "'Inter',sans-serif";
+Chart.defaults.font.size = 11.5;
+Chart.defaults.borderColor = 'rgba(255,255,255,.06)';
+
+let chartCaTrend, chartCommissions, chartStatutDonut, chartMontantStatut, chartPersonnel;
+
+/* ===================== KPIs ACCUEIL ===================== */
+function renderKpisAccueil(){
+  const gagnees = offres.filter(o=>o.statut==='gagné');
+  const tauxConversion = offres.length ? (gagnees.length/offres.length*100) : 0;
+  const totalCaFacture = caData.reduce((s,c)=>s+c.montant,0);
+  const kpis = [
+    {label:'CA facturé cumulé', val: fmtMoney(totalCaFacture), icon:'euro', bg:'rgba(16,185,129,.15)', fg:'#34d399', glow:'rgba(16,185,129,.18)'},
+    {label:'Offres gagnées', val: gagnees.length + ' / ' + offres.length, icon:'check', bg:'rgba(99,102,241,.15)', fg:'#a5b4fc', glow:'rgba(99,102,241,.2)'},
+    {label:'Taux de conversion', val: tauxConversion.toFixed(0)+'%', icon:'trend', bg:'rgba(236,72,153,.15)', fg:'#f472b6', glow:'rgba(236,72,153,.18)'},
+    {label:'Pipeline en cours', val: fmtMoney(offres.filter(o=>['relance','émise'].includes(o.statut)).reduce((s,o)=>s+o.montant,0)), icon:'pipeline', bg:'rgba(56,189,248,.15)', fg:'#38bdf8', glow:'rgba(56,189,248,.18)'},
+  ];
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
+    <div class="kpi-card" style="--kpi-glow:${k.glow}">
+      <div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}; color:${k.fg};"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k.icon]}</svg></div></div>
+      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-label">${k.label}</div>
+    </div>
+  `).join('');
+}
+
+/* ===================== OBJECTIF RING ===================== */
+function renderObjectifRing(){
+  const totalCaFacture = caData.reduce((s,c)=>s+c.montant,0);
+  const pct = Math.min(100, totalCaFacture/objectif*100);
+  document.getElementById('obj-pct').textContent = pct.toFixed(0)+'%';
+  document.getElementById('obj-ca').textContent = fmtMoney(totalCaFacture);
+  document.getElementById('obj-restant').textContent = fmtMoney(Math.max(0,objectif-totalCaFacture));
+  const nbMoisCa = new Set(caData.map(c=>c.annee+'-'+c.mois)).size || 1;
+  document.getElementById('obj-moy').textContent = fmtMoney(totalCaFacture/nbMoisCa);
+  const circle = document.getElementById('obj-ring-circle');
+  circle.setAttribute('stroke-dasharray', CIRC);
+  circle.style.strokeDashoffset = CIRC - (pct/100)*CIRC;
+}
+
+/* ===================== FUNNEL ===================== */
+function renderFunnel(){
+  const maxCount = Math.max(1,...STATUTS_ORDER.map(s=>offres.filter(o=>o.statut===s).length));
+  document.getElementById('funnel').innerHTML = STATUTS_ORDER.map(s=>{
+    const list = offres.filter(o=>o.statut===s);
+    const w = maxCount ? (list.length/maxCount*100) : 0;
+    return `<div class="funnel-row">
+      <div class="funnel-label">${STATUT_LABEL[s]}</div>
+      <div class="funnel-track"><div class="funnel-fill" style="width:${w}%; background:${STATUT_COLOR[s]};">${list.length} offre${list.length>1?'s':''}</div></div>
+      <div class="funnel-val">${fmtMoney(list.reduce((a,o)=>a+o.montant,0))}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ===================== CHART: CA TREND ===================== */
+function caByMonthData(){
+  const map = {};
+  caData.forEach(c=>{
+    const key = c.annee+'-'+String(c.mois+1).padStart(2,'0');
+    map[key] = (map[key]||0) + c.montant;
+  });
+  const keys = Object.keys(map).sort();
+  return {keys, map};
+}
+function renderChartCaTrend(){
+  const {keys, map} = caByMonthData();
+  const labels = keys.map(k=>{const [y,m]=k.split('-'); return MOIS_FR[parseInt(m)-1]+' '+y.slice(2);});
+  const data = keys.map(k=>map[k]);
+  if(chartCaTrend){ chartCaTrend.data.labels=labels; chartCaTrend.data.datasets[0].data=data; chartCaTrend.update(); return; }
+  chartCaTrend = new Chart(document.getElementById('chartCaTrend'), {
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        label:'CA facturé',
+        data,
+        borderColor:'#a855f7',
+        backgroundColor:(ctx)=>{
+          const g = ctx.chart.ctx.createLinearGradient(0,0,0,260);
+          g.addColorStop(0,'rgba(168,85,247,.35)'); g.addColorStop(1,'rgba(168,85,247,0)');
+          return g;
+        },
+        fill:true, tension:.4, borderWidth:3,
+        pointBackgroundColor:'#a855f7', pointBorderColor:'#0a0b14', pointBorderWidth:2, pointRadius:4,
+      }]
+    },
+    options:{
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>fmtMoney(c.parsed.y)}}},
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.05)'}, ticks:{callback:v=>(v/1000)+'k'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+}
+
+/* ===================== CHART: COMMISSIONS ===================== */
+function renderChartCommissions(){
+  const commKeys = Object.keys(commissions).sort();
+  const labels = commKeys.map(k=>{const [y,m]=k.split('-'); return MOIS_FR[parseInt(m)-1];});
+  const dataCo = commKeys.map(k=>commissions[k].companyRevenue||0);
+  const dataPerso = commKeys.map(k=>commissions[k].personalRevenueOverride ?? commissions[k].personalRevenue ?? 0);
+  if(chartCommissions){
+    chartCommissions.data.labels=labels;
+    chartCommissions.data.datasets[0].data=dataCo;
+    chartCommissions.data.datasets[1].data=dataPerso;
+    chartCommissions.update(); return;
+  }
+  chartCommissions = new Chart(document.getElementById('chartCommissions'), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'CA entreprise', data: dataCo, backgroundColor:'rgba(99,102,241,.55)', borderRadius:6, maxBarThickness:28},
+        {label:'Revenu personnel', data: dataPerso, backgroundColor:'rgba(236,72,153,.75)', borderRadius:6, maxBarThickness:28, yAxisID:'y1'},
+      ]
+    },
+    options:{
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10, boxHeight:10, usePointStyle:true, pointStyle:'circle'}}},
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.05)'}, ticks:{callback:v=>(v/1000)+'k'}},
+        y1:{position:'right', grid:{display:false}, ticks:{callback:v=>v+'€'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+}
+
+/* ===================== CHART: STATUT DONUT + MONTANT ===================== */
+function renderChartsPipeline(){
+  const statutCounts = STATUTS_ORDER.map(s=>offres.filter(o=>o.statut===s).length);
+  const statutMontants = STATUTS_ORDER.map(s=>offres.filter(o=>o.statut===s).reduce((a,o)=>a+o.montant,0));
+  if(chartStatutDonut){
+    chartStatutDonut.data.datasets[0].data = statutCounts; chartStatutDonut.update();
+  } else {
+    chartStatutDonut = new Chart(document.getElementById('chartStatutDonut'), {
+      type:'doughnut',
+      data:{
+        labels: STATUTS_ORDER.map(s=>STATUT_LABEL[s]),
+        datasets:[{data: statutCounts, backgroundColor:['#38bdf8','#f59e0b','#10b981','#f43f5e'], borderColor:'#0f1120', borderWidth:3, hoverOffset:6}]
+      },
+      options:{
+        cutout:'68%',
+        plugins:{legend:{position:'bottom', labels:{boxWidth:10, boxHeight:10, usePointStyle:true, pointStyle:'circle', padding:14}}}
+      }
+    });
+  }
+  if(chartMontantStatut){
+    chartMontantStatut.data.datasets[0].data = statutMontants; chartMontantStatut.update();
+  } else {
+    chartMontantStatut = new Chart(document.getElementById('chartMontantStatut'), {
+      type:'bar',
+      data:{
+        labels: STATUTS_ORDER.map(s=>STATUT_LABEL[s]),
+        datasets:[{data: statutMontants, backgroundColor:['#38bdf8','#f59e0b','#10b981','#f43f5e'], borderRadius:8, maxBarThickness:60}]
+      },
+      options:{
+        indexAxis:'y',
+        plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>fmtMoney(c.parsed.x)}}},
+        scales:{
+          x:{grid:{color:'rgba(255,255,255,.05)'}, ticks:{callback:v=>(v/1000)+'k'}},
+          y:{grid:{display:false}}
+        }
+      }
+    });
+  }
+}
+
+function refreshAccueil(){
+  renderKpisAccueil();
+  renderObjectifRing();
+  renderFunnel();
+  renderChartCaTrend();
+  renderChartCommissions();
+}
+function refreshPipeline(){
+  renderChartsPipeline();
+  renderOffresTable();
+}
+
+/* ===================== TABLE: OFFRES ===================== */
+let offresSort = {key:'date', dir:-1};
+let offresFilter = 'all';
+let offresSearch = '';
+
+function parseDateFr(d){
+  if(!d) return 0;
+  const [day,mon,yr] = d.split('/');
+  return new Date(`${yr}-${mon}-${day}`).getTime();
+}
+function todayFr(){
+  const d = new Date();
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+}
+
+function renderOffresTable(){
+  let rows = offres.filter(o=>{
+    if(offresFilter!=='all' && o.statut!==offresFilter) return false;
+    if(offresSearch){
+      const hay = (o.num+' '+o.client+' '+o.produit+' '+o.notes).toLowerCase();
+      if(!hay.includes(offresSearch.toLowerCase())) return false;
+    }
+    return true;
+  });
+  rows.sort((a,b)=>{
+    let av=a[offresSort.key], bv=b[offresSort.key];
+    if(offresSort.key==='date'){av=parseDateFr(av); bv=parseDateFr(bv);}
+    if(typeof av==='string'){av=av.toLowerCase(); bv=bv.toLowerCase();}
+    if(av<bv) return -1*offresSort.dir;
+    if(av>bv) return 1*offresSort.dir;
+    return 0;
+  });
+  document.getElementById('offres-tbody').innerHTML = rows.map(o=>`
+    <tr>
+      <td class="main">${o.num}</td>
+      <td>${o.client}</td>
+      <td>${o.produit}</td>
+      <td class="num">${fmtMoney(o.montant)}</td>
+      <td>${o.date}</td>
+      <td><span class="status-chip ${STATUT_CHIP_CLASS[o.statut]||''}">${o.statut}</span></td>
+      <td class="note-cell">${o.notes||'—'}</td>
+      <td>
+        <div class="row-actions">
+          <button class="row-btn" data-action="edit" data-id="${o.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+            Modifier
+          </button>
+          ${o.statut!=='gagné' ? `<button class="row-btn ca" data-action="towin" data-id="${o.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            CA
+          </button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--txt-2);">Aucun résultat</td></tr>';
+}
+document.querySelectorAll('#page-pipeline thead th[data-key]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(offresSort.key===key) offresSort.dir*=-1; else {offresSort.key=key; offresSort.dir=1;}
+    document.querySelectorAll('#page-pipeline thead th .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = offresSort.dir===1?'▲':'▼';
+    renderOffresTable();
+  });
+});
+document.getElementById('offres-search').addEventListener('input', e=>{ offresSearch = e.target.value; renderOffresTable(); });
+document.getElementById('offres-filters').addEventListener('click', e=>{
+  const btn = e.target.closest('.pill'); if(!btn) return;
+  document.querySelectorAll('#offres-filters .pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  offresFilter = btn.dataset.statut;
+  renderOffresTable();
+});
+
+/* ----- ajouter une offre ----- */
+let selectedPreset = 'validation';
+const PRESET_STATUT = {urgent:'relance', validation:'relance', relance:'relance'};
+document.getElementById('offre-presets').addEventListener('click', e=>{
+  const btn = e.target.closest('.preset-btn'); if(!btn) return;
+  document.querySelectorAll('#offre-presets .preset-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPreset = btn.dataset.preset;
+});
+document.getElementById('offre-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const client = document.getElementById('f-client').value.trim();
+  const montant = parseFloat(document.getElementById('f-montant').value) || 0;
+  if(!client || montant<=0){ toast('Client et montant requis', 'error'); return; }
+  const o = {
+    id: nextOffreId++,
+    num: document.getElementById('f-num').value.trim() || ('OFFRE-'+Date.now()),
+    client,
+    produit: document.getElementById('f-produit').value.trim(),
+    montant,
+    date: document.getElementById('f-date').value.trim() || todayFr(),
+    statut: document.getElementById('f-statut').value,
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+  offres.unshift(o);
+  e.target.reset();
+  document.getElementById('f-statut').value = PRESET_STATUT[selectedPreset] || 'relance';
+  refreshAccueil();
+  refreshPipeline();
+  persist();
+  toast('Offre ajoutée avec succès');
+});
+
+/* ----- modale modifier ----- */
+const modalEdit = document.getElementById('modal-edit');
+function openEditModal(id){
+  const o = offres.find(x=>x.id==id); if(!o) return;
+  document.getElementById('e-id').value = o.id;
+  document.getElementById('e-client').value = o.client;
+  document.getElementById('e-produit').value = o.produit;
+  document.getElementById('e-montant').value = o.montant;
+  document.getElementById('e-num').value = o.num;
+  document.getElementById('e-date').value = o.date;
+  document.getElementById('e-statut').value = o.statut;
+  document.getElementById('e-notes').value = o.notes;
+  modalEdit.classList.add('open');
+}
+function closeEditModal(){ modalEdit.classList.remove('open'); }
+document.getElementById('modal-edit-close').addEventListener('click', closeEditModal);
+document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
+modalEdit.addEventListener('click', e=>{ if(e.target===modalEdit) closeEditModal(); });
+document.getElementById('edit-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const id = document.getElementById('e-id').value;
+  const o = offres.find(x=>x.id==id); if(!o) return;
+  o.client = document.getElementById('e-client').value.trim();
+  o.produit = document.getElementById('e-produit').value.trim();
+  o.montant = parseFloat(document.getElementById('e-montant').value) || 0;
+  o.num = document.getElementById('e-num').value.trim();
+  o.date = document.getElementById('e-date').value.trim();
+  o.statut = document.getElementById('e-statut').value;
+  o.notes = document.getElementById('e-notes').value.trim();
+  closeEditModal();
+  refreshAccueil();
+  refreshPipeline();
+  renderCaTable();
+  persist();
+  toast('Offre mise à jour');
+});
+
+/* ----- bascule en CA ----- */
+function towinOffre(id){
+  const o = offres.find(x=>x.id==id); if(!o) return;
+  o.statut = 'gagné';
+  o.notes = (o.notes ? o.notes+' • ' : '') + 'Basculée en commande';
+  const [day,mon,yr] = (o.date||todayFr()).split('/');
+  caData.unshift({
+    client: o.client,
+    produit: o.num || o.produit,
+    montant: o.montant,
+    mois: (parseInt(mon)||(new Date().getMonth()+1))-1,
+    annee: parseInt(yr)||new Date().getFullYear(),
+  });
+  refreshAccueil();
+  refreshPipeline();
+  renderCaTable();
+  persist();
+  toast('Offre basculée en CA');
+}
+document.getElementById('offres-tbody').addEventListener('click', e=>{
+  const btn = e.target.closest('.row-btn'); if(!btn) return;
+  const id = btn.dataset.id;
+  if(btn.dataset.action==='edit') openEditModal(id);
+  if(btn.dataset.action==='towin') towinOffre(id);
+});
+
+/* ===================== PAGE CA ===================== */
+function renderKpisCa(){
+  const totalCaFacture = caData.reduce((s,c)=>s+c.montant,0);
+  const caKpis = [
+    {label:'CA total facturé', val: fmtMoney(totalCaFacture), icon:'euro', bg:'rgba(16,185,129,.15)', fg:'#34d399', glow:'rgba(16,185,129,.18)'},
+    {label:'Nombre de factures', val: caData.length, icon:'pipeline', bg:'rgba(99,102,241,.15)', fg:'#a5b4fc', glow:'rgba(99,102,241,.2)'},
+    {label:'Panier moyen', val: fmtMoney(totalCaFacture/(caData.length||1)), icon:'trend', bg:'rgba(236,72,153,.15)', fg:'#f472b6', glow:'rgba(236,72,153,.18)'},
+    {label:'CA entreprise (cumulé)', val: fmtMoney(Object.values(commissions).reduce((s,c)=>s+(c.companyRevenue||0),0)), icon:'euro', bg:'rgba(56,189,248,.15)', fg:'#38bdf8', glow:'rgba(56,189,248,.18)'},
+  ];
+  document.getElementById('ca-kpi-grid').innerHTML = caKpis.map(k=>`
+    <div class="kpi-card" style="--kpi-glow:${k.glow}">
+      <div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}; color:${k.fg};"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k.icon]}</svg></div></div>
+      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-label">${k.label}</div>
+    </div>
+  `).join('');
+}
+renderKpisCa();
+
+function persoCaForMonth(year, month){
+  return caData.filter(c=>c.annee===year && c.mois===month-1).reduce((s,c)=>s+c.montant,0);
+}
+function chartPersonnelYears(){
+  const years = new Set(caData.map(c=>c.annee));
+  Object.keys(commissions).forEach(k=>years.add(parseInt(k.split('-')[0])));
+  years.add(new Date().getFullYear());
+  return Array.from(years).sort((a,b)=>a-b);
+}
+let chartPersonnelYear = new Date().getFullYear();
+function populateChartPersonnelYears(){
+  const years = chartPersonnelYears();
+  if(!years.includes(chartPersonnelYear)) chartPersonnelYear = years[years.length-1];
+  const sel = document.getElementById('comm-perso-year');
+  sel.innerHTML = years.map(y=>`<option value="${y}" ${y===chartPersonnelYear?'selected':''}>${y}</option>`).join('');
+}
+function renderChartPersonnel(){
+  populateChartPersonnelYears();
+  const year = chartPersonnelYear;
+  const labels = MOIS_FR;
+  const data = [];
+  for(let m=1; m<=12; m++) data.push(persoCaForMonth(year, m));
+  const now = new Date();
+  const isCurrentYear = year === now.getFullYear();
+  const currentMonthIdx = now.getMonth();
+  const pointColors = MOIS_FR.map((_,i)=> (isCurrentYear && i===currentMonthIdx) ? '#f59e0b' : '#38bdf8');
+  const pointRadii = MOIS_FR.map((_,i)=> (isCurrentYear && i===currentMonthIdx) ? 6 : 4);
+  if(chartPersonnel){
+    chartPersonnel.data.labels=labels;
+    chartPersonnel.data.datasets[0].data=data;
+    chartPersonnel.data.datasets[0].pointBackgroundColor=pointColors;
+    chartPersonnel.data.datasets[0].pointRadius=pointRadii;
+    chartPersonnel.update();
+    return;
+  }
+  chartPersonnel = new Chart(document.getElementById('chartPersonnel'), {
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        label:'Mon CA personnel',
+        data,
+        borderColor:'#38bdf8',
+        backgroundColor:(ctx)=>{
+          const g = ctx.chart.ctx.createLinearGradient(0,0,0,260);
+          g.addColorStop(0,'rgba(56,189,248,.32)'); g.addColorStop(1,'rgba(56,189,248,0)');
+          return g;
+        },
+        fill:true, tension:.42, borderWidth:3,
+        pointBackgroundColor:pointColors, pointBorderColor:'#0a0b14', pointBorderWidth:2, pointRadius:pointRadii, pointHoverRadius:7,
+      }]
+    },
+    options:{
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#171a30', borderColor:'rgba(255,255,255,.12)', borderWidth:1, padding:10,
+          titleFont:{weight:700}, displayColors:false,
+          callbacks:{
+            title:c=> c[0].label+' '+chartPersonnelYear,
+            label:c=> fmtMoney(c.parsed.y),
+          }
+        }
+      },
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.05)'}, ticks:{callback:v=>(v/1000)+'k'}, beginAtZero:true},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+}
+renderChartPersonnel();
+document.getElementById('comm-perso-year').addEventListener('change', e=>{
+  chartPersonnelYear = parseInt(e.target.value);
+  renderChartPersonnel();
+});
+
+let caSort={key:'periode', dir:-1};
+function renderCaTable(){
+  let rows = [...caData];
+  rows.sort((a,b)=>{
+    if(caSort.key==='periode'){
+      const av=a.annee*100+a.mois, bv=b.annee*100+b.mois;
+      return av<bv ? -1*caSort.dir : av>bv ? 1*caSort.dir : 0;
+    }
+    let av=a[caSort.key], bv=b[caSort.key];
+    if(typeof av==='string'){av=(av||'').toLowerCase(); bv=(bv||'').toLowerCase();}
+    if(av<bv) return -1*caSort.dir;
+    if(av>bv) return 1*caSort.dir;
+    return 0;
+  });
+  document.getElementById('ca-tbody').innerHTML = rows.map(c=>`
+    <tr>
+      <td class="main">${c.client}</td>
+      <td>${c.produit}</td>
+      <td class="num">${fmtMoney(c.montant)}</td>
+      <td>${MOIS_FR[c.mois]||c.mois} ${c.annee}</td>
+    </tr>
+  `).join('');
+  document.getElementById('ca-count').textContent = rows.length + ' lignes';
+  renderKpisCa();
+  renderChartPersonnel();
+}
+document.querySelectorAll('th[data-tbl="ca"]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(caSort.key===key) caSort.dir*=-1; else {caSort.key=key; caSort.dir=1;}
+    document.querySelectorAll('th[data-tbl="ca"] .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = caSort.dir===1?'▲':'▼';
+    renderCaTable();
+  });
+});
+renderCaTable();
+
+/* ===================== PAGE RDV ===================== */
+const RDV_STATUTS = ['proposition','attente de date','programmé','confirmé','terminé','annulé'];
+const RDV_LABEL = {proposition:'Proposition', 'attente de date':'Attente de date', programmé:'Programmé', confirmé:'Confirmé', terminé:'Terminé', annulé:'Annulé'};
+const RDV_CHIP = {proposition:'st-proposition', 'attente de date':'st-attente', programmé:'st-programme', confirmé:'st-confirme', terminé:'st-termine', annulé:'st-annule'};
+let rdvFilter = 'all';
+let rdvNextId = 1;
+
+function fmtRdvDate(d){
+  if(!d) return '';
+  const dt = new Date(d+'T00:00:00');
+  if(isNaN(dt)) return d;
+  return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+}
+
+function renderRdvGrid(){
+  let rows = rdvFilter==='all' ? rdvData : rdvData.filter(r=>r.statut===rdvFilter);
+  rows = [...rows].sort((a,b)=> (a.date||'').localeCompare(b.date||''));
+  document.getElementById('rdv-count').textContent = rdvData.length + ' rendez-vous';
+  document.getElementById('rdv-grid').innerHTML = rows.map(r=>`
+    <div class="rdv-card">
+      <div class="rdv-top">
+        <div>
+          <div class="rdv-title">${r.titre}</div>
+          <div class="rdv-contact">${r.contact||''}</div>
+        </div>
+        <span class="status-chip ${RDV_CHIP[r.statut]||''}">${RDV_LABEL[r.statut]||r.statut}</span>
+      </div>
+      <div class="rdv-meta">
+        <span class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtRdvDate(r.date)}${r.heure? ' · '+r.heure:''}</span>
+        ${r.type ? `<span class="type-chip">${r.type}</span>` : ''}
+      </div>
+      ${r.lieu? `<div class="rdv-meta"><span class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>${r.lieu}</span></div>`:''}
+      ${r.note? `<div class="rdv-note">${r.note}</div>`:''}
+      <div class="rdv-foot">
+        <select class="rdv-status-select" data-id="${r.id}">
+          ${RDV_STATUTS.map(s=>`<option value="${s}" ${s===r.statut?'selected':''}>${RDV_LABEL[s]}</option>`).join('')}
+        </select>
+        <button class="rdv-delete" data-id="${r.id}" aria-label="Supprimer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('') || '<div class="rdv-empty">Aucun rendez-vous pour ce filtre. Ajoute-en un ci-dessus.</div>';
+}
+
+document.getElementById('rdv-filters').addEventListener('click', e=>{
+  const btn = e.target.closest('.pill'); if(!btn) return;
+  document.querySelectorAll('#rdv-filters .pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  rdvFilter = btn.dataset.statut;
+  renderRdvGrid();
+});
+
+document.getElementById('rdv-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const titre = document.getElementById('r-titre').value.trim();
+  const date = document.getElementById('r-date').value;
+  if(!titre || !date){ toast('Titre et date requis', 'error'); return; }
+  rdvData.unshift({
+    id: rdvNextId++,
+    titre,
+    contact: document.getElementById('r-contact').value.trim(),
+    date,
+    heure: document.getElementById('r-heure').value,
+    type: document.getElementById('r-type').value,
+    statut: document.getElementById('r-statut').value,
+    lieu: document.getElementById('r-lieu').value.trim(),
+    note: document.getElementById('r-note').value.trim(),
+  });
+  e.target.reset();
+  document.getElementById('r-statut').value = 'programmé';
+  renderRdvGrid();
+  persist();
+  toast('Rendez-vous ajouté');
+});
+
+document.getElementById('rdv-grid').addEventListener('change', e=>{
+  const sel = e.target.closest('.rdv-status-select'); if(!sel) return;
+  const r = rdvData.find(x=>x.id==sel.dataset.id); if(!r) return;
+  r.statut = sel.value;
+  renderRdvGrid();
+  persist();
+  toast('Statut mis à jour');
+});
+document.getElementById('rdv-grid').addEventListener('click', e=>{
+  const btn = e.target.closest('.rdv-delete'); if(!btn) return;
+  const id = btn.dataset.id;
+  rdvData = rdvData.filter(x=>x.id!=id);
+  renderRdvGrid();
+  persist();
+  toast('Rendez-vous supprimé');
+});
+
+rdvNextId = (Math.max(0,...rdvData.map(r=>r.id||0))+1);
+renderRdvGrid();
+
+/* ===================== PAGE TODO ===================== */
+let todoNextId = (Math.max(0,...todoData.map(t=>t.id||0))+1);
+let todoView = 'tomorrow';
+let todoPriority = 'normal';
+const JOURS_FR = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+
+function dateForView(view){
+  const d = new Date();
+  if(view==='tomorrow') d.setDate(d.getDate()+1);
+  return d;
+}
+function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+function renderTodoHeader(){
+  document.querySelectorAll('.todo-view-btn').forEach(b=>{
+    const active = b.dataset.view===todoView;
+    b.classList.toggle('btn-primary', active);
+    b.classList.toggle('btn-ghost', !active);
+  });
+  if(todoView==='done'){
+    document.getElementById('todo-date-title').textContent = '✓ Tâches terminées';
+    document.getElementById('todo-date-sub').textContent = 'Historique de ce que tu as accompli';
+  } else {
+    const d = dateForView(todoView);
+    const label = `${JOURS_FR[d.getDay()]} ${d.getDate()} ${MOIS_LONG_FR[d.getMonth()]}`;
+    document.getElementById('todo-date-title').textContent = (todoView==='tomorrow'?'→ ':'') + capitalize(label);
+    document.getElementById('todo-date-sub').textContent = todoView==='tomorrow' ? 'Tes tâches pour demain' : "Tes tâches pour aujourd'hui";
+  }
+}
+
+function renderTodoStats(){
+  const total = todoData.length;
+  const urgent = todoData.filter(t=>t.priority==='urgent' && !t.done).length;
+  const open = todoData.filter(t=>!t.done).length;
+  const done = todoData.filter(t=>t.done).length;
+  document.getElementById('todo-stat-total').textContent = total;
+  document.getElementById('todo-stat-urgent').textContent = urgent;
+  document.getElementById('todo-stat-open').textContent = open;
+  document.getElementById('todo-stat-done').textContent = done;
+  document.getElementById('todo-progress-fill').style.width = (total? done/total*100 : 0)+'%';
+}
+
+function todoRowHtml(t){
+  return `
+    <div class="todo-row ${t.done?'done':''}">
+      <button type="button" class="todo-row-check" data-action="toggle" data-id="${t.id}">${t.done?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':''}</button>
+      <div class="todo-row-txt" data-action="toggle" data-id="${t.id}">${t.text}</div>
+      <span class="todo-row-badge ${t.priority==='urgent'?'urgent':'normal'}">${t.priority==='urgent'?'Urgent':'Normal'}</span>
+      <button type="button" class="todo-row-del" data-action="delete" data-id="${t.id}" aria-label="Supprimer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+}
+
+function renderTodoList(){
+  let html = '';
+  if(todoView==='done'){
+    const rows = todoData.filter(t=>t.done).sort((a,b)=> new Date(b.doneAt||0)-new Date(a.doneAt||0));
+    html = rows.length
+      ? `<div class="todo-section-label"><span class="sq closed"></span>Terminées</div>` + rows.map(todoRowHtml).join('')
+      : '<div class="rdv-empty">Aucune tâche terminée pour le moment.</div>';
+  } else {
+    const open = todoData.filter(t=>!t.done && t.date===todoView).sort((a,b)=> (b.priority==='urgent')-(a.priority==='urgent'));
+    html += `<div class="todo-section-label"><span class="sq open"></span>À faire</div>`;
+    html += open.length ? open.map(todoRowHtml).join('') : '<div class="rdv-empty">Aucune tâche. Ajoutes-en une ci-dessus.</div>';
+  }
+  document.getElementById('todo-list-wrap').innerHTML = html;
+}
+
+function renderTicker(){
+  const active = todoData.filter(t=>!t.done);
+  const wrap = document.getElementById('task-ticker-wrap');
+  if(!active.length){ wrap.style.display='none'; return; }
+  wrap.style.display='flex';
+  document.getElementById('ticker-count').textContent = active.length;
+  document.getElementById('ticker-plural').textContent = active.length>1 ? 's' : '';
+  const itemHtml = t => `<span class="ticker-item ${t.priority==='urgent'?'urgent':''}" data-view="${t.date}"><span class="dot"></span>${t.text}${t.priority==='urgent'?'<span class="badge-urgent-mini">Urgent</span>':''}</span>`;
+  const items = active.map(itemHtml).join('');
+  document.getElementById('ticker-track').innerHTML = items + items;
+}
+
+function renderTodoPage(){
+  renderTodoHeader();
+  renderTodoStats();
+  renderTodoList();
+  renderTicker();
+}
+
+document.querySelectorAll('.todo-view-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{ todoView = btn.dataset.view; renderTodoPage(); });
+});
+document.getElementById('t-priority-toggle').addEventListener('click', e=>{
+  const btn = e.target.closest('.pill'); if(!btn) return;
+  document.querySelectorAll('#t-priority-toggle .pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  todoPriority = btn.dataset.priority;
+});
+document.getElementById('todo-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const text = document.getElementById('t-text').value.trim();
+  if(!text) return;
+  todoData.unshift({
+    id: todoNextId++,
+    text,
+    done: false,
+    priority: todoPriority,
+    date: todoView==='done' ? 'tomorrow' : todoView,
+    createdAt: new Date().toISOString(),
+  });
+  e.target.reset();
+  document.querySelectorAll('#t-priority-toggle .pill').forEach(p=>p.classList.remove('active'));
+  document.querySelector('#t-priority-toggle .pill[data-priority="normal"]').classList.add('active');
+  todoPriority = 'normal';
+  renderTodoPage();
+  persist();
+  toast('Tâche ajoutée');
+});
+document.getElementById('todo-list-wrap').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-action]'); if(!btn) return;
+  const t = todoData.find(x=>x.id==btn.dataset.id); if(!t) return;
+  if(btn.dataset.action==='toggle'){
+    t.done = !t.done;
+    t.doneAt = t.done ? new Date().toISOString() : undefined;
+  } else if(btn.dataset.action==='delete'){
+    todoData = todoData.filter(x=>x.id!=t.id);
+  }
+  renderTodoPage();
+  persist();
+});
+document.getElementById('ticker-track').addEventListener('click', e=>{
+  const item = e.target.closest('.ticker-item'); if(!item) return;
+  document.querySelector('[data-page="todo"]').click();
+  todoView = item.dataset.view;
+  renderTodoPage();
+});
+document.getElementById('task-ticker-wrap').querySelector('.ticker-label').addEventListener('click', ()=>{
+  document.querySelector('[data-page="todo"]').click();
+});
+
+renderTodoPage();
+
+/* ===================== PAGE COMMISSIONS ===================== */
+const COMM_RATE_PERSO = 0.01;
+const COMM_RATE_SOCIETE = 0.002;
+/* Base salaire net = "Net payé" du bulletin de paie de Mai 2026 (3 337,93 €) moins les 233 € de remboursement de frais pro (non lié au salaire) */
+const SALAIRE_BASE_NET = 3337.93 - 233;
+
+const MASK_TEXT = '•••••• €';
+const ICONS_EYE = {
+  on: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  off: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.6 21.6 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.61 3.79M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+};
+let commNetHidden = localStorage.getItem('comm_net_hidden') === '1';
+function toggleCommNetHidden(){
+  commNetHidden = !commNetHidden;
+  localStorage.setItem('comm_net_hidden', commNetHidden ? '1' : '0');
+  renderCommissionsPage();
+}
+document.getElementById('comm-net-eye').addEventListener('click', toggleCommNetHidden);
+
+function allPeriods(){
+  const set = new Set(Object.keys(commissions));
+  caData.forEach(c=> set.add(c.annee+'-'+String(c.mois+1).padStart(2,'0')));
+  const now = new Date();
+  set.add(now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0'));
+  return Array.from(set).sort();
+}
+function currentRealPeriod(){
+  const now = new Date();
+  return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+}
+let commPeriod = (()=>{
+  const periods = allPeriods();
+  const real = currentRealPeriod();
+  return periods.includes(real) ? real : periods[periods.length-1];
+})();
+
+function caAutoForPeriod(period){
+  const [y,m] = period.split('-').map(Number);
+  return caData.filter(c=>c.annee===y && c.mois===m-1).reduce((s,c)=>s+c.montant,0);
+}
+function ensurePeriod(period){
+  if(!commissions[period]) commissions[period] = {yearMonth:period, companyRevenue:0, companyRevenueSource:'manual'};
+  return commissions[period];
+}
+
+function renderCommissionsPage(){
+  const periods = allPeriods();
+  const idx = periods.indexOf(commPeriod);
+  const entry = ensurePeriod(commPeriod);
+  const [y,m] = commPeriod.split('-').map(Number);
+  const periodLabel = MOIS_FR[m-1]+' '+y;
+
+  document.getElementById('comm-period-label').textContent = periodLabel;
+  document.getElementById('comm-pill-period').textContent = periodLabel;
+  document.getElementById('comm-perso-period').textContent = periodLabel+' · auto';
+  document.getElementById('comm-soc-period').textContent = periodLabel+' · saisie manuelle uniquement';
+  document.getElementById('comm-prev').disabled = idx<=0;
+  document.getElementById('comm-next').disabled = idx>=periods.length-1;
+
+  const autoCa = caAutoForPeriod(commPeriod);
+  const hasOverride = entry.personalRevenueOverride !== undefined && entry.personalRevenueOverride !== null && entry.personalRevenueOverride !== '';
+  const persoCa = hasOverride ? entry.personalRevenueOverride : autoCa;
+  document.getElementById('comm-perso-auto').value = fmtMoneyFull(autoCa);
+  document.getElementById('comm-perso-override').value = hasOverride ? entry.personalRevenueOverride : '';
+  const sourceTag = document.getElementById('comm-perso-source-tag');
+  sourceTag.textContent = 'Source : ' + (hasOverride ? 'Override manuel' : 'Mon CA — '+periodLabel+' (automatique)');
+  sourceTag.className = 'comm-source ' + (hasOverride ? 'manual' : 'auto');
+
+  const societeCa = entry.companyRevenue || 0;
+  document.getElementById('comm-soc-input').value = societeCa || '';
+  document.getElementById('comm-soc-saved').textContent = fmtMoneyFull(societeCa);
+
+  const commissionPerso = persoCa * COMM_RATE_PERSO;
+  const commissionSociete = societeCa * COMM_RATE_SOCIETE;
+  const commissionTotale = commissionPerso + commissionSociete;
+  const salaireNet = SALAIRE_BASE_NET + commissionTotale;
+
+  document.getElementById('comm-rate-label').textContent = (COMM_RATE_PERSO*100)+'%';
+  document.getElementById('comm-perso-commission').textContent = fmtMoneyFull(commissionPerso);
+  document.getElementById('comm-pill-amount').textContent = fmtMoneyFull(commissionTotale) + ' commission';
+  document.getElementById('comm-pill-net').textContent = (commNetHidden ? MASK_TEXT : fmtMoneyFull(salaireNet)) + ' net estimé';
+  const eyeBtn = document.getElementById('comm-net-eye');
+  eyeBtn.classList.toggle('active', commNetHidden);
+  eyeBtn.innerHTML = commNetHidden
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.6 21.6 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.61 3.79M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+  document.getElementById('comm-kpi-grid').innerHTML = [
+    {label:'CA Perso', val: fmtMoney(persoCa), icon:'euro', bg:'rgba(56,189,248,.15)', fg:'#38bdf8', glow:'rgba(56,189,248,.18)'},
+    {label:'CA Société', val: fmtMoney(societeCa), icon:'pipeline', bg:'rgba(245,158,11,.15)', fg:'#fbbf24', glow:'rgba(245,158,11,.18)'},
+    {label:'Commission totale', val: fmtMoneyFull(commissionTotale), icon:'trend', bg:'rgba(16,185,129,.15)', fg:'#34d399', glow:'rgba(16,185,129,.18)'},
+    {label:'Salaire net total', val: commNetHidden ? MASK_TEXT : fmtMoneyFull(salaireNet), icon:'salaire', bg:'rgba(168,85,247,.15)', fg:'#c4b5fd', glow:'rgba(168,85,247,.18)', maskable:true},
+  ].map(k=>`
+    <div class="kpi-card" style="--kpi-glow:${k.glow}">
+      <div class="kpi-top">
+        <div class="kpi-icon" style="background:${k.bg}; color:${k.fg};"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k.icon]}</svg></div>
+        ${k.maskable ? `<button type="button" class="eye-toggle" id="comm-net-eye-kpi" title="Masquer / afficher le montant" aria-label="Masquer ou afficher le salaire net">${commNetHidden ? ICONS_EYE.off : ICONS_EYE.on}</button>` : ''}
+      </div>
+      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-label">${k.label}</div>
+    </div>
+  `).join('');
+  const eyeKpi = document.getElementById('comm-net-eye-kpi');
+  if(eyeKpi) eyeKpi.addEventListener('click', toggleCommNetHidden);
+}
+
+document.getElementById('comm-prev').addEventListener('click', ()=>{
+  const periods = allPeriods(); const idx = periods.indexOf(commPeriod);
+  if(idx>0){ commPeriod = periods[idx-1]; renderCommissionsPage(); }
+});
+document.getElementById('comm-next').addEventListener('click', ()=>{
+  const periods = allPeriods(); const idx = periods.indexOf(commPeriod);
+  if(idx<periods.length-1){ commPeriod = periods[idx+1]; renderCommissionsPage(); }
+});
+document.getElementById('comm-today').addEventListener('click', ()=>{
+  commPeriod = currentRealPeriod();
+  renderCommissionsPage();
+});
+document.getElementById('comm-goto-ca').addEventListener('click', ()=>{
+  document.querySelector('[data-page="ca"]').click();
+});
+document.getElementById('comm-perso-save').addEventListener('click', ()=>{
+  const entry = ensurePeriod(commPeriod);
+  const v = document.getElementById('comm-perso-override').value;
+  entry.personalRevenueOverride = v==='' ? undefined : parseFloat(v);
+  renderCommissionsPage();
+  renderChartCommissions();
+  renderChartPersonnel();
+  persist();
+  toast('Override CA personnel enregistré');
+});
+document.getElementById('comm-perso-reset').addEventListener('click', ()=>{
+  const entry = ensurePeriod(commPeriod);
+  delete entry.personalRevenueOverride;
+  renderCommissionsPage();
+  renderChartCommissions();
+  renderChartPersonnel();
+  persist();
+  toast('Override réinitialisé');
+});
+document.getElementById('comm-soc-save').addEventListener('click', ()=>{
+  const entry = ensurePeriod(commPeriod);
+  entry.companyRevenue = parseFloat(document.getElementById('comm-soc-input').value) || 0;
+  entry.companyRevenueSource = 'manual';
+  renderCommissionsPage();
+  renderChartCommissions();
+  persist();
+  toast('CA société enregistré');
+});
+
+/* ===================== EXPORT / IMPORT ===================== */
+document.getElementById('btn-export').addEventListener('click', ()=>{
+  persist();
+  const blob = new Blob([JSON.stringify(STATE, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'dashboard_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Sauvegarde exportée');
+});
+document.getElementById('btn-import').addEventListener('click', ()=> document.getElementById('file-import').click());
+document.getElementById('file-import').addEventListener('change', e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    try{
+      const imported = JSON.parse(ev.target.result);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
+      toast('Import réussi, rechargement...');
+      setTimeout(()=>location.reload(), 700);
+    }catch(err){
+      toast('Fichier JSON invalide', 'error');
+    }
+  };
+  reader.readAsText(file);
+});
+
+/* ===================== INIT ===================== */
+refreshAccueil();
+refreshPipeline();
+renderCommissionsPage();
+
+/* ===================== PWA: SERVICE WORKER ===================== */
+if('serviceWorker' in navigator && (location.protocol==='http:' || location.protocol==='https:')){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

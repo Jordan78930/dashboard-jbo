@@ -1,0 +1,17 @@
+{
+  "name": "Bilan Commercial — Jordan Boissonnade",
+  "short_name": "Bilan CA",
+  "description": "Pipeline, CA, commissions, RDV et tâches commerciales",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0b14",
+  "theme_color": "#0a0b14",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
