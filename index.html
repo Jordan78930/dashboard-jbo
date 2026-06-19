@@ -94,6 +94,9 @@ button{font-family:inherit; cursor:pointer;}
 }
 .badge-archive svg{width:13px; height:13px;}
 
+/* ===== BOTTOM NAV (mobile app-style) ===== */
+.bottom-nav{display:none;}
+
 .tabs{display:flex; gap:4px; background:var(--glass); border:1px solid var(--glass-brd); border-radius:13px; padding:4px;}
 .tab-btn{
   padding:8px 16px; border:none; background:transparent; color:var(--txt-1);
@@ -171,6 +174,7 @@ section{padding:34px 0 0;}
 
 /* ===== CHART CARDS ===== */
 .grid-2{display:grid; grid-template-columns:1.5fr 1fr; gap:18px;}
+.grid-2-equal{grid-template-columns:1fr 1fr;}
 .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
 .chart-card{
   background:var(--glass); border:1px solid var(--glass-brd); border-radius:var(--radius);
@@ -532,56 +536,112 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
   .grid-2{grid-template-columns:1fr;}
   .grid-3{grid-template-columns:1fr;}
+  .grid-2-equal{grid-template-columns:1fr;}
   .grid-3 [style*="grid-column:span 2"]{grid-column:auto;}
 }
 @media (max-width:640px){
+  html{-webkit-text-size-adjust:100%;}
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom));}
   .wrap{padding:0 16px;}
   .kpi-grid{grid-template-columns:1fr;}
   .kpi-card{padding:16px;}
-  .topbar-inner{flex-wrap:wrap; padding:12px 16px;}
-  .tabs{order:3; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;}
-  .topbar-actions{order:2; margin-left:auto;}
+
+  /* topbar: brand + actions only, tabs replaced by bottom nav */
+  .topbar-inner{padding:12px 16px; flex-wrap:nowrap;}
+  .tabs{display:none;}
+  .brand-txt p{display:none;}
+  .topbar-actions{margin-left:auto;}
   .save-status span:not(.dot){display:none;}
+  .save-status{padding:8px; border-radius:10px; background:rgba(255,255,255,.04);}
   .badge-archive span{display:none;}
-  .hero{padding:28px 0 4px;}
-  .hero h2{font-size:22px;}
-  .hero p.sub{font-size:14px;}
+  .badge-archive{padding:8px;}
+
+  .hero{padding:24px 0 4px;}
+  .hero-eyebrow{font-size:11px; padding:5px 11px;}
+  .hero h2{font-size:21px;}
+  .hero p.sub{font-size:13.5px;}
   .section-head h3{font-size:16px;}
 
+  /* bottom app nav */
+  .bottom-nav{
+    display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60;
+    background:rgba(10,11,20,.92); backdrop-filter:blur(18px) saturate(160%);
+    border-top:1px solid var(--glass-brd);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  .bn-btn{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    background:transparent; border:none; color:var(--txt-2); padding:7px 2px; border-radius:12px;
+    min-height:50px; transition:color .15s ease;
+  }
+  .bn-btn svg{width:21px; height:21px;}
+  .bn-btn span{font-size:10px; font-weight:600; letter-spacing:.1px;}
+  .bn-btn.active{color:#c4b5fd;}
+  .bn-btn.active svg{filter:drop-shadow(0 0 6px rgba(168,85,247,.5));}
+  .bn-btn:active{background:rgba(255,255,255,.06);}
+
+  /* bigger touch targets everywhere */
+  .btn{min-height:44px;}
+  .pill{min-height:38px; display:inline-flex; align-items:center;}
+  .icon-btn{width:40px; height:40px;}
+  .row-btn{min-height:36px;}
+  .eye-toggle{width:30px; height:30px;}
+  .todo-row-check, .todo-check{width:24px; height:24px;}
+  .rdv-delete{width:34px; height:34px;}
+
   .form-card{padding:16px;}
-  .preset-row{grid-template-columns:1fr;}
+  .preset-row{grid-template-columns:1fr; gap:8px;}
   .form-grid{grid-template-columns:1fr;}
   .form-actions{flex-direction:column-reverse;}
   .form-actions .btn{width:100%; justify-content:center;}
 
-  .obj-card{flex-direction:column; align-items:flex-start; padding:20px;}
-  .obj-stats{gap:18px;}
+  .obj-card{flex-direction:column; align-items:flex-start; padding:18px; gap:18px;}
+  .obj-ring-wrap{width:120px; height:120px;}
+  .obj-stats{gap:16px; width:100%;}
 
-  .funnel-row{grid-template-columns:90px 1fr 56px; gap:8px;}
+  .funnel-row{grid-template-columns:84px 1fr 52px; gap:8px;}
 
-  .table-toolbar{padding:14px 16px;}
-  .modal-box{padding:18px; max-height:94vh;}
+  .table-toolbar{padding:12px 14px; gap:8px;}
+  .filter-pills{gap:6px;}
+  .modal-box{padding:18px; max-height:94vh; border-radius:16px;}
+  .modal-overlay{padding:0; align-items:flex-end;}
+  .modal-box{max-width:100%; width:100%; border-radius:20px 20px 0 0; max-height:90vh;}
+
+  /* commissions page: real mobile layout, not a squeezed desktop grid */
+  .comm-head{padding:16px;}
+  .comm-head h3{font-size:17px;}
+  .comm-pills{gap:6px;}
+  .comm-pill{font-size:11.5px; padding:7px 10px; flex:1 1 auto; justify-content:center;}
+  .comm-pill .eye-toggle{margin-left:4px;}
 
   .period-nav{flex-direction:column; align-items:stretch; gap:10px; padding:14px;}
-  .period-nav .ctr{justify-content:space-between;}
-  .comm-row{flex-wrap:wrap;}
-  .comm-row .form-field{flex-basis:100%;}
+  .period-nav .ctr{justify-content:space-between; order:1;}
+  .period-nav .lbl{order:0;}
+  .period-nav > #comm-today{order:2; width:100%;}
+  .period-nav .ctr .btn{flex:0 0 auto; min-width:44px;}
+  .period-nav .cur{flex:1; min-width:0;}
+
+  .comm-panel{padding:16px;}
+  .comm-row{flex-direction:column; align-items:stretch; gap:8px;}
+  .comm-row .form-field{flex-basis:auto; width:100%;}
+  .comm-row .btn{width:100%; justify-content:center;}
+  #comm-perso-override + .btn, #comm-perso-override ~ .btn{width:auto; flex:1;}
+
+  .kpi-top .eye-toggle{position:static;}
 
   .rdv-grid{grid-template-columns:1fr;}
   .rdv-card{padding:15px;}
 
-  .todo-head{flex-direction:column; align-items:flex-start;}
+  .todo-head{flex-direction:column; align-items:flex-start; gap:10px;}
+  .todo-head-title h3{font-size:19px;}
   .todo-view-tabs{width:100%;}
-  .todo-view-btn{flex:1; padding:9px 8px;}
+  .todo-view-btn{flex:1; padding:10px 6px; font-size:11.5px;}
   .todo-stats{grid-template-columns:repeat(2,1fr);}
-  .todo-row{flex-wrap:wrap;}
+  .todo-row{flex-wrap:wrap; padding:12px 14px;}
   .todo-row-badge{order:3; margin-left:34px;}
 
-  .ticker-wrap{flex-direction:column; align-items:flex-start; gap:8px; padding:12px 14px;}
+  .ticker-wrap{flex-direction:column; align-items:flex-start; gap:8px; padding:12px 14px; margin-top:16px;}
   .ticker-label{border-right:none; padding-right:0;}
-
-  .comm-head{padding:18px;}
-  .comm-panel{padding:16px;}
 }
 @media (max-width:420px){
   .grid-3{grid-template-columns:1fr;}
@@ -589,6 +649,7 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
   .funnel-val{text-align:left;}
   table{font-size:12px;}
   thead th, tbody td{padding:9px 10px;}
+  .comm-pills{flex-direction:column; align-items:stretch;}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
@@ -632,6 +693,33 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
     </div>
   </div>
 </div>
+
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bn-btn active" data-page="accueil" aria-label="Accueil">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+    <span>Accueil</span>
+  </button>
+  <button class="bn-btn" data-page="pipeline" aria-label="Pipeline">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+    <span>Pipeline</span>
+  </button>
+  <button class="bn-btn" data-page="ca" aria-label="CA">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+    <span>CA</span>
+  </button>
+  <button class="bn-btn" data-page="commissions" aria-label="Commissions">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>Comm.</span>
+  </button>
+  <button class="bn-btn" data-page="rdv" aria-label="RDV">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    <span>RDV</span>
+  </button>
+  <button class="bn-btn" data-page="todo" aria-label="Tâches">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <span>Tâches</span>
+  </button>
+</nav>
 
 <div class="wrap">
 
@@ -903,7 +991,7 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
 
       <div class="kpi-grid" id="comm-kpi-grid" style="margin-bottom:18px;"></div>
 
-      <div class="grid-2" style="grid-template-columns:1fr 1fr;">
+      <div class="grid-2 grid-2-equal">
         <div class="comm-panel">
           <h5>Mon CA Personnel</h5>
           <div class="ps" id="comm-perso-period">— · auto</div>
@@ -1621,13 +1709,14 @@ const fmtMoney = n => (n||0).toLocaleString('fr-FR',{maximumFractionDigits:0}) +
 const fmtMoneyFull = n => (n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
 
 /* ===================== NAVIGATION ===================== */
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('page-'+btn.dataset.page).classList.add('active');
-  });
+function goToPage(page){
+  document.querySelectorAll('.tab-btn, .bn-btn').forEach(b=>b.classList.toggle('active', b.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+}
+document.querySelectorAll('.tab-btn, .bn-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> goToPage(btn.dataset.page));
 });
 
 const ICONS = {
