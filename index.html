@@ -392,6 +392,7 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
   transition:all .18s ease; flex-shrink:0;
 }
 .icon-btn:hover{color:var(--txt-0); border-color:var(--glass-brd-hov); background:rgba(255,255,255,.07);}
+.icon-btn.active{color:#34d399; background:rgba(16,185,129,.12); border-color:rgba(16,185,129,.3);}
 .icon-btn svg{width:16px; height:16px;}
 .save-status{display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--txt-2); font-weight:600; white-space:nowrap;}
 .save-status .dot{width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 6px #34d399;}
@@ -679,6 +680,9 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
     </div>
     <div class="topbar-actions">
       <div class="save-status" id="save-status"><span class="dot"></span><span id="save-status-text">Sauvegardé</span></div>
+      <button class="icon-btn" id="btn-sync" title="Synchroniser entre appareils" aria-label="Synchroniser entre appareils">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9c-2.52 0-4.93-1-6.74-2.74L3 16"/><path d="M3 12a9 9 0 0 1 9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>
+      </button>
       <button class="icon-btn" id="btn-export" title="Exporter en JSON" aria-label="Exporter en JSON">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
@@ -924,6 +928,55 @@ footer{margin-top:60px; padding:24px 0; border-top:1px solid var(--glass-brd); t
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: SYNC ================= -->
+  <div class="modal-overlay" id="modal-sync">
+    <div class="modal-box" style="max-width:440px;">
+      <div class="modal-head">
+        <h4>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M21 12a9 9 0 0 1-9 9c-2.52 0-4.93-1-6.74-2.74L3 16"/><path d="M3 12a9 9 0 0 1 9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>
+          Synchronisation
+        </h4>
+        <button class="modal-close" id="modal-sync-close" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div id="sync-disconnected-view">
+        <p style="font-size:13px; color:var(--txt-2); line-height:1.6; margin-bottom:18px;">Relie ce PC et ton téléphone pour que les offres, RDV, tâches et commissions se synchronisent automatiquement entre les deux.</p>
+
+        <div class="form-card" style="padding:16px; margin-bottom:14px;">
+          <div class="form-head" style="margin-bottom:10px;"><h4 style="font-size:13.5px;">Premier appareil</h4></div>
+          <p style="font-size:12px; color:var(--txt-2); margin-bottom:12px;">Génère un code ici, tu l'entreras ensuite sur ton autre appareil.</p>
+          <button type="button" class="btn btn-primary" id="sync-generate-btn" style="width:100%; justify-content:center;">Générer un code de synchro</button>
+        </div>
+
+        <div class="form-card" style="padding:16px;">
+          <div class="form-head" style="margin-bottom:10px;"><h4 style="font-size:13.5px;">Autre appareil</h4></div>
+          <p style="font-size:12px; color:var(--txt-2); margin-bottom:12px;">Entre ici le code généré sur ton premier appareil.</p>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="sync-join-input" class="search-input" style="background-image:none; padding-left:14px; text-transform:uppercase;" placeholder="Coller le code ici">
+            <button type="button" class="btn btn-primary" id="sync-join-btn">Relier</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sync-connected-view" style="display:none;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 16px; background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25); border-radius:12px; margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px; flex-shrink:0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div><div style="font-size:13.5px; font-weight:700; color:#34d399;">Synchronisation active</div><div style="font-size:11.5px; color:var(--txt-2);">Tes appareils restent à jour automatiquement</div></div>
+        </div>
+        <div class="form-field" style="margin-bottom:16px;">
+          <label>Code de synchro (à entrer sur ton autre appareil)</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="sync-code-display" readonly style="background:rgba(255,255,255,.04); border:1px solid var(--glass-brd); border-radius:10px; padding:10px 13px; color:var(--txt-0); font-size:13px; flex:1; font-family:monospace;">
+            <button type="button" class="btn btn-ghost" id="sync-copy-btn">Copier</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-ghost" id="sync-disconnect-btn" style="width:100%; justify-content:center; color:#fb7185;">Déconnecter cet appareil</button>
+      </div>
     </div>
   </div>
 
@@ -1691,7 +1744,81 @@ function persist(){
     statusText.textContent = 'Sauvegardé';
     document.getElementById('save-status').querySelector('.dot').style.background = '#34d399';
   }
+  if(window.syncPush) window.syncPush(STATE);
 }
+
+/* ===================== SYNC (Firebase) ===================== */
+window.getCurrentState = () => STATE;
+window.applyRemoteState = (remoteState) => {
+  if(!remoteState) return;
+  STATE.data = remoteState.data || STATE.data;
+  STATE.commissions = remoteState.commissions || STATE.commissions;
+  STATE.settings = remoteState.settings || STATE.settings;
+  offres = STATE.data.offres || [];
+  caData = STATE.data.caData || [];
+  rdvData = STATE.data.rdvData || [];
+  todoData = STATE.data.todoData || [];
+  commissions = STATE.commissions || {};
+  nextOffreId = STATE.data.nextId || (Math.max(0,...offres.map(o=>o.id||0))+1);
+  rdvNextId = (Math.max(0,...rdvData.map(r=>r.id||0))+1);
+  todoNextId = (Math.max(0,...todoData.map(t=>t.id||0))+1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  refreshAccueil();
+  refreshPipeline();
+  renderCaTable();
+  renderRdvGrid();
+  renderTodoPage();
+  renderCommissionsPage();
+  toast('Données synchronisées');
+};
+window.updateSyncStatus = (connected, code) => {
+  document.getElementById('sync-disconnected-view').style.display = connected ? 'none' : 'block';
+  document.getElementById('sync-connected-view').style.display = connected ? 'block' : 'none';
+  if(connected) document.getElementById('sync-code-display').value = code;
+  document.getElementById('btn-sync').classList.toggle('active', connected);
+};
+
+const modalSync = document.getElementById('modal-sync');
+function openSyncModal(){ modalSync.classList.add('open'); }
+function closeSyncModal(){ modalSync.classList.remove('open'); }
+document.getElementById('btn-sync').addEventListener('click', openSyncModal);
+document.getElementById('modal-sync-close').addEventListener('click', closeSyncModal);
+modalSync.addEventListener('click', e=>{ if(e.target===modalSync) closeSyncModal(); });
+
+document.getElementById('sync-generate-btn').addEventListener('click', async ()=>{
+  if(!window.syncGenerate) return;
+  const btn = document.getElementById('sync-generate-btn');
+  btn.disabled = true; btn.textContent = 'Génération...';
+  try{
+    await window.syncGenerate();
+    toast('Code généré, connecté');
+  }catch(e){
+    toast('Erreur de connexion à la synchro', 'error');
+  }
+  btn.disabled = false; btn.textContent = 'Générer un code de synchro';
+});
+document.getElementById('sync-join-btn').addEventListener('click', async ()=>{
+  const code = document.getElementById('sync-join-input').value.trim();
+  if(!code){ toast('Colle un code', 'error'); return; }
+  if(!window.syncJoin) return;
+  const btn = document.getElementById('sync-join-btn');
+  btn.disabled = true; btn.textContent = '...';
+  try{
+    await window.syncJoin(code);
+    toast('Appareils reliés');
+  }catch(e){
+    toast('Code invalide ou erreur réseau', 'error');
+  }
+  btn.disabled = false; btn.textContent = 'Relier';
+});
+document.getElementById('sync-disconnect-btn').addEventListener('click', ()=>{
+  if(window.syncDisconnect) window.syncDisconnect();
+  toast('Appareil déconnecté de la synchro');
+});
+document.getElementById('sync-copy-btn').addEventListener('click', ()=>{
+  const val = document.getElementById('sync-code-display').value;
+  navigator.clipboard?.writeText(val).then(()=> toast('Code copié')).catch(()=>{});
+});
 
 /* ===================== TOAST ===================== */
 function toast(msg, type='success'){
@@ -2642,6 +2769,87 @@ if('serviceWorker' in navigator && (location.protocol==='http:' || location.prot
   window.addEventListener('load', ()=>{
     navigator.serviceWorker.register('./sw.js').catch(()=>{});
   });
+}
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCITBurkHRdp6hyZq-CTXN9NkKz9nKIWEo",
+  authDomain: "dashboard-jbo.firebaseapp.com",
+  projectId: "dashboard-jbo",
+  storageBucket: "dashboard-jbo.firebasestorage.app",
+  messagingSenderId: "256508389283",
+  appId: "1:256508389283:web:de39bda10e6371fa4a9c16"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const SYNC_KEY = 'dashboard_sync_id';
+
+let syncId = localStorage.getItem(SYNC_KEY) || null;
+let unsub = null;
+let pushTimer = null;
+let suppressNextSnapshot = false;
+
+function genCode(){
+  return Array.from(crypto.getRandomValues(new Uint8Array(10))).map(b=>b.toString(36).padStart(2,'0')).join('');
+}
+
+function listen(id){
+  if(unsub) unsub();
+  unsub = onSnapshot(doc(db, 'syncs', id), (snap)=>{
+    if(!snap.exists()) return;
+    if(suppressNextSnapshot){ suppressNextSnapshot = false; return; }
+    window.applyRemoteState(snap.data().state);
+  }, ()=>{ /* connection error: stay on local data silently */ });
+}
+
+window.syncGenerate = async () => {
+  const id = genCode();
+  await setDoc(doc(db, 'syncs', id), { state: window.getCurrentState(), updatedAt: Date.now() });
+  syncId = id;
+  localStorage.setItem(SYNC_KEY, id);
+  listen(id);
+  window.updateSyncStatus(true, id);
+  return id;
+};
+
+window.syncJoin = async (id) => {
+  id = id.trim();
+  const ref = doc(db, 'syncs', id);
+  const snap = await getDoc(ref);
+  if(!snap.exists()) throw new Error('not-found');
+  window.applyRemoteState(snap.data().state);
+  syncId = id;
+  localStorage.setItem(SYNC_KEY, id);
+  listen(id);
+  window.updateSyncStatus(true, id);
+};
+
+window.syncDisconnect = () => {
+  if(unsub) unsub();
+  unsub = null;
+  syncId = null;
+  localStorage.removeItem(SYNC_KEY);
+  window.updateSyncStatus(false);
+};
+
+window.syncPush = (state) => {
+  if(!syncId) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(async ()=>{
+    suppressNextSnapshot = true;
+    try{ await setDoc(doc(db, 'syncs', syncId), { state, updatedAt: Date.now() }); }
+    catch(e){ suppressNextSnapshot = false; }
+  }, 900);
+};
+
+if(syncId){
+  listen(syncId);
+  window.updateSyncStatus(true, syncId);
 }
 </script>
 </body>
